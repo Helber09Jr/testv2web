@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel Admin | La Arboleda Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Pantalla de Login -->
+  <div id="pantallaLogin" class="pantalla-login">
+    <div class="contenedor-login">
+      <img src="imagenes/logo-arboleda.png" alt="Logo La Arboleda" class="logo-login">
+      <h1 class="titulo-login">Panel de Administración</h1>
+      <p class="subtitulo-login">La Arboleda Club - Tacna</p>
+      
+      <form id="formularioLogin" class="formulario-login">
+        <div class="campo-login">
+          <label for="emailAdmin">Correo electrónico</label>
+          <input type="email" id="emailAdmin" required placeholder="admin@laarboledaclub.com" autocomplete="email">
+        </div>
+        <div class="campo-login">
+          <label for="passwordAdmin">Contraseña</label>
+          <input type="password" id="passwordAdmin" required placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button type="submit" class="boton-login">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          Ingresar
+        </button>
+        <p id="errorLogin" class="error-login"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Panel Principal -->
+  <div id="panelPrincipal" class="panel-principal oculto">
+    
+    <!-- Header Admin -->
+    <header class="header-admin">
+      <div class="contenedor-header-admin">
+        <div class="logo-admin">
+          <img src="imagenes/logo-arboleda.png" alt="Logo" class="logo-img-admin">
+          <div class="info-admin">
+            <h1>Panel de Reservas</h1>
+            <span>La Arboleda Club</span>
+          </div>
+        </div>
+        <div class="acciones-admin">
+          <span id="usuarioActual" class="usuario-actual"></span>
+          <button id="btnCerrarSesion" class="boton-cerrar-sesion">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="contenido-admin">
+      
+      <!-- Estadísticas Rápidas -->
+      <section class="seccion-estadisticas">
+        <div class="tarjeta-estadistica">
+          <div class="icono-estadistica pendiente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="info-estadistica">
+            <span id="totalPendientes" class="numero-estadistica">0</span>
+            <span class="etiqueta-estadistica">Pendientes</span>
+          </div>
+        </div>
+        <div class="tarjeta-estadistica">
+          <div class="icono-estadistica reservado">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="info-estadistica">
+            <span id="totalReservados" class="numero-estadistica">0</span>
+            <span class="etiqueta-estadistica">Reservados</span>
+          </div>
+        </div>
+        <div class="tarjeta-estadistica">
+          <div class="icono-estadistica cancelado">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="info-estadistica">
+            <span id="totalCancelados" class="numero-estadistica">0</span>
+            <span class="etiqueta-estadistica">Cancelados</span>
+          </div>
+        </div>
+        <div class="tarjeta-estadistica">
+          <div class="icono-estadistica total">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="info-estadistica">
+            <span id="totalGeneral" class="numero-estadistica">0</span>
+            <span class="etiqueta-estadistica">Total Reservas</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Botón Reserva Manual -->
+      <section class="seccion-acciones-rapidas">
+        <button id="btnReservaManual" class="boton-reserva-manual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Registrar Reserva Manual
+        </button>
+      </section>
+
+      <!-- Filtros -->
+      <section class="seccion-filtros">
+        <h2 class="titulo-seccion-admin">Filtrar Reservas</h2>
+        <div class="contenedor-filtros">
+          <div class="filtro-item">
+            <label for="filtroFechaInicio">Desde</label>
+            <input type="date" id="filtroFechaInicio">
+          </div>
+          <div class="filtro-item">
+            <label for="filtroFechaFin">Hasta</label>
+            <input type="date" id="filtroFechaFin">
+          </div>
+          <div class="filtro-item">
+            <label for="filtroInstalacion">Instalación</label>
+            <select id="filtroInstalacion">
+              <option value="">Todas</option>
+              <option value="parrillas">Parrillas</option>
+              <option value="tenis">Tenis</option>
+              <option value="fronton">Frontón</option>
+              <option value="mesas">Mesas</option>
+            </select>
+          </div>
+          <div class="filtro-item">
+            <label for="filtroEstado">Estado</label>
+            <select id="filtroEstado">
+              <option value="">Todos</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="reservado">Reservado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
+          <div class="filtro-item">
+            <label for="filtroBusqueda">Buscar</label>
+            <input type="text" id="filtroBusqueda" placeholder="Nombre, teléfono...">
+          </div>
+          <button id="btnLimpiarFiltros" class="boton-limpiar-filtros">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Limpiar
+          </button>
+          <button id="btnExportarExcel" class="boton-exportar-excel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Exportar Excel
+          </button>
+        </div>
+      </section>
+
+      <!-- Lista de Reservas -->
+      <section class="seccion-reservas-admin">
+        <div class="cabecera-lista">
+          <h2 class="titulo-seccion-admin">Reservas</h2>
+          <span id="contadorResultados" class="contador-resultados">0 resultados</span>
+        </div>
+        
+        <div id="listaReservas" class="lista-reservas-admin">
+          <!-- Se genera dinámicamente -->
+        </div>
+        
+        <div id="sinResultados" class="sin-resultados oculto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <p>No se encontraron reservas con los filtros aplicados</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Detalle Reserva -->
+  <div id="modalDetalle" class="modal-admin" role="dialog" aria-modal="true">
+    <div class="modal-overlay-admin"></div>
+    <div class="modal-contenido-admin">
+      <button class="boton-cerrar-modal-admin" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      
+      <div class="modal-header-admin">
+        <h3>Detalle de Reserva</h3>
+        <span id="detalleId" class="detalle-id"></span>
+      </div>
+      
+      <div class="modal-body-admin">
+        <div class="detalle-grid">
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Instalación</span>
+            <span id="detalleInstalacion" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Fecha</span>
+            <span id="detalleFecha" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Horario</span>
+            <span id="detalleHorario" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Socio</span>
+            <span id="detalleSocio" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Teléfono</span>
+            <span id="detalleTelefono" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Personas</span>
+            <span id="detallePersonas" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item completo">
+            <span class="detalle-etiqueta">Observaciones</span>
+            <span id="detalleObservaciones" class="detalle-valor"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Estado Actual</span>
+            <span id="detalleEstadoActual" class="detalle-valor badge"></span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-etiqueta">Fecha de Creación</span>
+            <span id="detalleFechaCreacion" class="detalle-valor"></span>
+          </div>
+        </div>
+        
+        <div class="acciones-estado">
+          <h4>Cambiar Estado</h4>
+          <div class="botones-estado">
+            <button class="boton-estado pendiente" data-estado="pendiente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Pendiente
+            </button>
+            <button class="boton-estado reservado" data-estado="reservado">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              Reservado
+            </button>
+            <button class="boton-estado cancelado" data-estado="cancelado">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              Cancelado
+            </button>
+          </div>
+        </div>
+        
+        <div class="accion-whatsapp">
+          <button id="btnWhatsAppAdmin" class="boton-whatsapp-admin">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Notificar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reserva Manual -->
+  <div id="modalReservaManual" class="modal-admin" role="dialog" aria-modal="true">
+    <div class="modal-overlay-admin"></div>
+    <div class="modal-contenido-admin modal-reserva-manual">
+      <button class="boton-cerrar-modal-admin" id="btnCerrarReservaManual" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      
+      <div class="modal-header-admin">
+        <h3>Reserva Manual</h3>
+        <span class="subtitulo-manual">Para casos excepcionales (no socios, invitados, etc.)</span>
+      </div>
+      
+      <div class="modal-body-admin">
+        <form id="formularioReservaManual" class="formulario-manual">
+          <div class="fila-campos-admin">
+            <div class="campo-admin">
+              <label for="manualInstalacion">Instalación *</label>
+              <select id="manualInstalacion" required>
+                <option value="">-- Seleccionar --</option>
+                <optgroup label="Parrillas">
+                  <option value="parrilla-central">Parrilla Central (30 pers.)</option>
+                  <option value="parrilla-grande">Parrilla Grande (35 pers.)</option>
+                  <option value="parrilla-familiar">Parrilla Familiar (10 pers.)</option>
+                  <option value="parrilla-1">Parrilla 1 (25 pers.)</option>
+                  <option value="parrilla-2">Parrilla 2 (25 pers.)</option>
+                  <option value="parrilla-3">Parrilla 3 (25 pers.)</option>
+                  <option value="parrilla-4">Parrilla 4 (25 pers.)</option>
+                </optgroup>
+                <optgroup label="Tenis">
+                  <option value="tenis-1">Cancha de Tenis 1</option>
+                  <option value="tenis-2">Cancha de Tenis 2</option>
+                  <option value="tenis-3">Cancha de Tenis 3</option>
+                </optgroup>
+                <optgroup label="Frontón">
+                  <option value="fronton-1">Frontón 1</option>
+                  <option value="fronton-2">Frontón 2</option>
+                  <option value="fronton-3">Frontón 3</option>
+                  <option value="fronton-4">Frontón 4</option>
+                </optgroup>
+                <optgroup label="Otros">
+                  <option value="mesa-restaurante">Mesa Restaurante</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="campo-admin">
+              <label for="manualFecha">Fecha *</label>
+              <input type="date" id="manualFecha" required>
+            </div>
+          </div>
+          
+          <div class="campo-admin">
+            <label for="manualHorario">Horario</label>
+            <input type="text" id="manualHorario" placeholder="Ej: 10:00 AM - 6:00 PM o 14:00-15:00" value="10:00 AM - 6:00 PM">
+          </div>
+          
+          <div class="fila-campos-admin">
+            <div class="campo-admin">
+              <label for="manualNombre">Nombre completo *</label>
+              <input type="text" id="manualNombre" required placeholder="Ej: Juan Pérez García">
+            </div>
+            <div class="campo-admin">
+              <label for="manualTelefono">Teléfono *</label>
+              <input type="tel" id="manualTelefono" required placeholder="Ej: 910000123">
+            </div>
+          </div>
+          
+          <div class="fila-campos-admin">
+            <div class="campo-admin">
+              <label for="manualPersonas">Cantidad personas *</label>
+              <input type="number" id="manualPersonas" required min="1" max="50" placeholder="Ej: 10">
+            </div>
+            <div class="campo-admin">
+              <label for="manualEstado">Estado inicial</label>
+              <select id="manualEstado">
+                <option value="pendiente">Pendiente</option>
+                <option value="reservado">Reservado (confirmado)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="campo-admin">
+            <label for="manualObservaciones">Observaciones / Motivo</label>
+            <textarea id="manualObservaciones" placeholder="Ej: Invitado especial, evento corporativo, autorizado por gerencia..." maxlength="500"></textarea>
+          </div>
+          
+          <div class="botones-manual">
+            <button type="button" id="btnCancelarManual" class="boton-cancelar-manual">Cancelar</button>
+            <button type="submit" class="boton-guardar-manual">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Guardar Reserva
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notificación -->
+  <div id="toastAdmin" class="toast-admin" role="alert">
+    <svg class="toast-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="toastMensajeAdmin"></span>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
