@@ -172,13 +172,15 @@ body {
   display: none;
 }
 
-/* Header Admin */
+/* Header Admin - Diseño profesional */
 .header-admin {
-  background: linear-gradient(90deg, #0d2535 0%, var(--azul-principal) 50%, #0d2535 100%);
+  background: linear-gradient(135deg, #0d2535 0%, var(--azul-principal) 100%);
   color: var(--blanco);
-  padding: 16px 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  border-bottom: 3px solid var(--dorado);
+  padding: 20px 0 0;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .contenedor-header-admin {
@@ -279,18 +281,20 @@ body {
 
 .tarjeta-estadistica {
   background: var(--blanco);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
-  gap: 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .tarjeta-estadistica:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 82, 180, 0.1);
 }
 
 .icono-estadistica {
@@ -351,10 +355,11 @@ body {
 
 .seccion-filtros {
   background: var(--blanco);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .contenedor-filtros {
@@ -427,9 +432,10 @@ body {
 
 .seccion-reservas-admin {
   background: var(--blanco);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .cabecera-lista {
@@ -1480,23 +1486,22 @@ body {
 .nav-tabs-admin {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  padding: 15px 30px;
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 8px;
+  padding: 12px 30px 16px;
+  background: transparent;
 }
 
 .tab-admin {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 25px;
+  color: rgba(255, 255, 255, 0.75);
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1504,18 +1509,18 @@ body {
 
 .tab-admin:hover {
   color: white;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .tab-admin.activo {
-  color: white;
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--dorado);
+  color: var(--azul-oscuro);
+  background: var(--blanco);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .tab-admin svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
 }
 
 /* Contenido de pestañas */
@@ -1539,9 +1544,32 @@ body {
 
 .seccion-estadisticas-carta {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
   margin-bottom: 25px;
+}
+
+.seccion-estadisticas-carta .tarjeta-estadistica {
+  padding: 18px 15px;
+  gap: 12px;
+}
+
+.seccion-estadisticas-carta .icono-estadistica {
+  width: 48px;
+  height: 48px;
+}
+
+.seccion-estadisticas-carta .icono-estadistica svg {
+  width: 24px;
+  height: 24px;
+}
+
+.seccion-estadisticas-carta .numero-estadistica {
+  font-size: 1.6rem;
+}
+
+.seccion-estadisticas-carta .etiqueta-estadistica {
+  font-size: 0.8rem;
 }
 
 .seccion-estadisticas-carta .icono-estadistica.disponible {
@@ -1562,10 +1590,11 @@ body {
 
 .seccion-filtros-carta {
   background: var(--blanco);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 /* ==========================================================
@@ -1574,9 +1603,10 @@ body {
 
 .seccion-platos-admin {
   background: var(--blanco);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .lista-platos-admin {
@@ -1588,17 +1618,18 @@ body {
 .tarjeta-plato-admin {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background: #fafafa;
-  border: 2px solid #e8e8e8;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--blanco);
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .tarjeta-plato-admin:hover {
-  border-color: var(--azul-principal);
-  box-shadow: 0 4px 12px rgba(0, 82, 180, 0.1);
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #fafafa;
 }
 
 .plato-imagen-admin {
@@ -1988,30 +2019,56 @@ body {
     gap: 10px;
   }
 
-  /* Lista de platos responsive */
+  /* Lista de platos responsive - mantener horizontal compacto */
   .tarjeta-plato-admin {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 12px;
+    padding: 12px;
   }
 
   .plato-imagen-admin {
-    width: 100%;
-    height: 120px;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+  }
+
+  .plato-info-admin {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .plato-nombre-admin {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+
+  .plato-categoria-admin {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  .plato-etiquetas-actuales {
+    display: none; /* Ocultar etiquetas en móvil para ahorrar espacio */
   }
 
   .acciones-plato-admin {
-    width: 100%;
+    flex-shrink: 0;
   }
 
   .boton-toggle-agotado {
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px;
   }
 
   .boton-editar-etiquetas {
-    flex: 1;
-    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .boton-editar-etiquetas svg {
+    width: 14px;
+    height: 14px;
   }
 
   /* Modal etiquetas responsive */
