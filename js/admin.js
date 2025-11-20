@@ -1080,19 +1080,23 @@ async function cargarDatosCarta() {
     if (!responsePlatos.ok) throw new Error('Error al cargar carta.json');
     const dataPlatos = await responsePlatos.json();
 
-    // Aplanar todos los platos de todas las categorías
-    platosData = [];
+    // Crear mapa de categorías para búsqueda rápida
+    const categoriasMap = {};
     if (dataPlatos.categorias) {
-      dataPlatos.categorias.forEach(categoria => {
-        if (categoria.platos) {
-          categoria.platos.forEach(plato => {
-            platosData.push({
-              ...plato,
-              categoria: categoria.nombre,
-              categoriaId: categoria.id
-            });
-          });
-        }
+      dataPlatos.categorias.forEach(cat => {
+        categoriasMap[cat.id] = cat.nombre;
+      });
+    }
+
+    // Cargar platos del array principal
+    platosData = [];
+    if (dataPlatos.platos) {
+      dataPlatos.platos.forEach(plato => {
+        platosData.push({
+          ...plato,
+          categoria: categoriasMap[plato.categoria] || plato.categoria,
+          categoriaId: plato.categoria
+        });
       });
     }
 
