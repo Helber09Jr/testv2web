@@ -43,6 +43,12 @@ a {
   --verde-menta: #50E3C2;
   --morado-elegante: #7B68EE;
   --coral: #FF6B6B;
+
+  /* Transiciones normalizadas */
+  --transicion-rapida: 0.3s ease-in-out;
+  --transicion-media: 0.4s ease-in-out;
+  --transicion-lenta: 0.6s ease-in-out;
+  --transicion-suave: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -315,12 +321,35 @@ a {
   z-index: 1;
   max-width: 900px;
   padding: 40px;
-  animation: fadeInUp 1.3s ease;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación escalonada para elementos del hero */
+.contenido-hero .etiqueta-hero {
+  animation: fadeInUp 0.6s ease-out 0.1s backwards;
+}
+
+.contenido-hero .titulo-principal {
+  animation: fadeInUp 0.6s ease-out 0.2s backwards;
+}
+
+.contenido-hero .subtitulo-hero {
+  animation: fadeInUp 0.6s ease-out 0.3s backwards;
+}
+
+.contenido-hero .botones-hero {
+  animation: fadeInUp 0.6s ease-out 0.4s backwards;
 }
 
 .titulo-principal {
@@ -1207,22 +1236,37 @@ a {
   50% { box-shadow: 0 8px 40px rgba(37, 211, 102, 0.85); }
 }
 
-.animar-entrada { 
-  opacity: 0; 
-  transform: translateY(30px); 
-  transition: opacity 0.7s ease, transform 0.7s ease; 
+.animar-entrada {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.animar-tarjeta { 
-  opacity: 0; 
-  transform: translateY(30px); 
-  transition: opacity 0.7s ease var(--retraso, 0s), transform 0.7s ease var(--retraso, 0s); 
+.animar-entrada.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.animar-footer { 
-  opacity: 0; 
-  transform: translateY(30px); 
-  transition: opacity 0.7s ease, transform 0.7s ease; 
+.animar-tarjeta {
+  opacity: 0;
+  transform: translateY(25px) scale(0.98);
+  transition: opacity 0.5s ease-out var(--retraso, 0s), transform 0.5s ease-out var(--retraso, 0s);
+}
+
+.animar-tarjeta.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.animar-footer {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.animar-footer.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 ::-webkit-scrollbar { width: 12px; }
