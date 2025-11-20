@@ -1264,14 +1264,26 @@ function abrirModalEtiquetas(platoId) {
   document.getElementById('modalEtiquetasTitulo').textContent = plato.nombre;
   document.getElementById('modalEtiquetasPrecio').textContent = `S/ ${plato.precio?.toFixed(2) || '0.00'}`;
 
-  // Desmarcar todos los checkboxes
+  // Desmarcar todos los checkboxes y radio buttons
   document.querySelectorAll('#modalEditarEtiquetas input[type="checkbox"]').forEach(cb => {
     cb.checked = false;
   });
 
-  // Marcar los checkboxes de las etiquetas actuales
+  // Por defecto, seleccionar "Sin estado" en disponibilidad
+  const radioSinEstado = document.querySelector('#modalEditarEtiquetas input[name="estadoDisponibilidad"][value=""]');
+  if (radioSinEstado) radioSinEstado.checked = true;
+
+  // Marcar las etiquetas actuales
   etiquetasPlato.forEach(etiquetaId => {
-    const checkbox = document.querySelector(`#modalEditarEtiquetas input[value="${etiquetaId}"]`);
+    // Primero buscar en radio buttons (estado de disponibilidad)
+    const radio = document.querySelector(`#modalEditarEtiquetas input[type="radio"][value="${etiquetaId}"]`);
+    if (radio) {
+      radio.checked = true;
+      return;
+    }
+
+    // Luego buscar en checkboxes
+    const checkbox = document.querySelector(`#modalEditarEtiquetas input[type="checkbox"][value="${etiquetaId}"]`);
     if (checkbox) {
       checkbox.checked = true;
     }
@@ -1297,8 +1309,19 @@ async function guardarEtiquetasPlato() {
   }
 
   // Obtener etiquetas seleccionadas
+  const etiquetasSeleccionadas = [];
+
+  // Obtener el estado de disponibilidad (radio button)
+  const radioSeleccionado = document.querySelector('#modalEditarEtiquetas input[name="estadoDisponibilidad"]:checked');
+  if (radioSeleccionado && radioSeleccionado.value) {
+    etiquetasSeleccionadas.push(radioSeleccionado.value);
+  }
+
+  // Obtener los checkboxes seleccionados
   const checkboxes = document.querySelectorAll('#modalEditarEtiquetas input[type="checkbox"]:checked');
-  const etiquetasSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+  checkboxes.forEach(cb => {
+    etiquetasSeleccionadas.push(cb.value);
+  });
 
   try {
     const btnGuardar = document.getElementById('btnGuardarEtiquetas');
