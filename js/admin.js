@@ -1339,11 +1339,14 @@ async function guardarEtiquetasPlato() {
     // Actualizar datos locales
     estadosPlatosData[platoSeleccionado.id] = etiquetasSeleccionadas;
 
+    // Guardar nombre antes de cerrar modal
+    const nombrePlato = platoSeleccionado.nombre;
+
     // Re-renderizar lista
     renderizarPlatos();
 
     cerrarModalEtiquetas();
-    mostrarToast(`Etiquetas actualizadas para: ${platoSeleccionado.nombre}`);
+    mostrarToast(`Etiquetas actualizadas para: ${nombrePlato}`);
 
     // Restaurar botón
     btnGuardar.disabled = false;
