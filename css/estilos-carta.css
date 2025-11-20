@@ -1007,6 +1007,36 @@ button {
   transform: scale(1.1);
 }
 
+/* Indicadores compactos para vista simple */
+.indicadores-simple {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.indicador-simple {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.indicador-simple.nuevo {
+  background: #10b981;
+  box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+}
+
+.indicador-simple.popular {
+  background: #8b5cf6;
+  box-shadow: 0 0 4px rgba(139, 92, 246, 0.5);
+}
+
+.indicador-simple.promo {
+  background: #f59e0b;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+}
+
 /* Sin resultados */
 .sin-resultados {
   text-align: center;
@@ -2523,7 +2553,17 @@ button {
     width: 14px;
     height: 14px;
   }
-  
+
+  /* Indicadores simple responsive */
+  .indicador-simple {
+    width: 6px;
+    height: 6px;
+  }
+
+  .indicadores-simple {
+    gap: 3px;
+  }
+
   .tarjeta-plato {
     border-radius: 14px;
   }

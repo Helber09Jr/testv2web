@@ -371,21 +371,33 @@ function crearTarjetaSimple(plato) {
   const platoAgotado = sistemaEtiquetasListo && estaAgotado(plato.id);
   const claseAgotado = platoAgotado ? 'agotado' : '';
 
-  // Generar etiquetas compactas para vista simple
-  const htmlEtiquetas = sistemaEtiquetasListo ? generarHTMLEtiquetas(plato.id, { maxEtiquetas: 2 }) : '';
+  // Generar indicadores compactos para vista simple (solo puntos de colores)
+  let indicadoresHtml = '';
+  if (sistemaEtiquetasListo) {
+    const indicadores = [];
 
-  // Texto de agotado para vista simple
-  const textoAgotado = platoAgotado ? '<span class="texto-agotado-simple">Agotado</span>' : '';
+    // Indicador de promoción (nuevo, popular, 2x1, descuento, recomendado)
+    if (tieneEtiqueta(plato.id, 'nuevo')) {
+      indicadores.push('<span class="indicador-simple nuevo" title="Nuevo"></span>');
+    } else if (tieneEtiqueta(plato.id, 'popular')) {
+      indicadores.push('<span class="indicador-simple popular" title="Popular"></span>');
+    } else if (tieneEtiqueta(plato.id, '2x1') || tieneEtiqueta(plato.id, 'descuento')) {
+      indicadores.push('<span class="indicador-simple promo" title="Promoción"></span>');
+    }
+
+    if (indicadores.length > 0) {
+      indicadoresHtml = `<div class="indicadores-simple">${indicadores.join('')}</div>`;
+    }
+  }
 
   return `
     <div class="tarjeta-plato-simple ${claseAgotado}" data-plato-id="${plato.id}" tabindex="0">
-      ${htmlEtiquetas}
       <div class="plato-simple-info">
         <span class="plato-simple-icono">${iconoCategoria}</span>
         <span class="plato-simple-nombre">${plato.nombre}</span>
-        ${textoAgotado}
       </div>
       <div class="plato-simple-acciones">
+        ${indicadoresHtml}
         <span class="plato-simple-precio">S/ ${plato.precio.toFixed(2)}</span>
         <button class="btn-agregar-simple" data-plato-id="${plato.id}" aria-label="Agregar ${plato.nombre}" ${platoAgotado ? 'disabled' : ''}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
