@@ -1561,6 +1561,73 @@ a {
   .botones-hero { flex-direction: column; gap: 12px; }
   .boton-primario, .boton-secundario { padding: 14px 32px; font-size: 0.9rem; }
   .titulo-seccion { font-size: 1.6rem; }
+
+  /* Sobre Nosotros más compacto en móvil - 1 columna */
+  .seccion-informacion {
+    padding: 25px 15px;
+  }
+
+  .contenedor-info-compacto {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .info-texto {
+    text-align: center;
+  }
+
+  .encabezado-seccion {
+    margin-bottom: 12px;
+  }
+
+  .etiqueta-seccion {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .titulo-seccion {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+
+  .linea-decorativa {
+    width: 50px;
+    height: 3px;
+    margin: 0 auto 15px;
+  }
+
+  .descripcion-principal {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* Tarjeta de horarios más compacta */
+  .tarjeta-horarios-compacta {
+    padding: 18px;
+    gap: 12px;
+    border-radius: 14px;
+  }
+
+  .icono-horario {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .tarjeta-horarios-compacta h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .tarjeta-horarios-compacta p {
+    font-size: 0.8rem;
+  }
+
+  .nota-horarios {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
   
   .grilla-instalaciones { 
     grid-template-columns: repeat(2, 1fr); 

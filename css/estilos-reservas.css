@@ -1650,6 +1650,97 @@ button {
   content: '🔐';
 }
 
+/* Modal de reserva más compacto en móvil - sin scroll */
+@media (max-width: 480px) {
+  .modal-contenido-reserva {
+    max-height: 95vh;
+  }
+
+  .modal-header-reserva {
+    padding: 12px 15px;
+  }
+
+  .modal-header-reserva h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .resumen-reserva {
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .resumen-item {
+    font-size: 0.75rem;
+  }
+
+  .modal-body-reserva {
+    padding: 12px;
+    max-height: none;
+  }
+
+  .seccion-validacion-socio {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .titulo-validacion {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+
+  .campo-formulario {
+    gap: 4px;
+  }
+
+  .campo-formulario label {
+    font-size: 0.8rem;
+  }
+
+  .campo-formulario input,
+  .campo-formulario select,
+  .campo-formulario textarea {
+    padding: 8px 10px;
+    font-size: 16px !important;
+  }
+
+  .campo-formulario textarea {
+    height: 50px;
+  }
+
+  .formulario-reserva {
+    gap: 10px;
+  }
+
+  .botones-formulario-reserva {
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .boton-confirmar-reserva,
+  .boton-whatsapp-reserva {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  .aviso-ayuda {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    margin-top: 8px;
+  }
+
+  .resultado-verificacion {
+    margin-top: 8px;
+    min-height: 20px;
+  }
+
+  .exito-verificacion,
+  .error-verificacion {
+    font-size: 0.8rem;
+  }
+}
+
 .campo-boton {
   display: flex;
   align-items: flex-end;
@@ -2387,10 +2478,10 @@ label:has(~ input[required])::after {
   .subtitulo-hero-reservas { font-size: 0.95rem; }
   .titulo-seccion-reservas { font-size: 1.6rem; }
 
-  /* Grid 2 columnas en móvil pequeño también */
+  /* Grid 1 columna en móvil pequeño */
   .grilla-instalaciones-reservas {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   /* Sección de validación más compacta */
