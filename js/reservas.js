@@ -160,28 +160,36 @@ function verificarSocio() {
   const campoBusqueda = document.getElementById('reservaBuscarSocio');
   const resultadoDiv = document.getElementById('resultadoVerificacion');
   const datosContainer = document.getElementById('datosSocioContainer');
+  const btnVerificar = document.querySelector('.boton-verificar-socio');
   const busqueda = campoBusqueda ? campoBusqueda.value.trim() : '';
-  
+
   if (!busqueda) {
     if (resultadoDiv) {
-      resultadoDiv.innerHTML = '<span class="error-verificacion">⚠️ Ingresa el número de socio o DNI</span>';
+      resultadoDiv.innerHTML = '<span class="error-verificacion">Ingresa el número de socio o DNI</span>';
     }
     return;
   }
+
+  if (btnVerificar) btnVerificar.classList.add('boton-cargando');
   
   if (sociosData.length === 0) {
+    if (btnVerificar) btnVerificar.classList.remove('boton-cargando');
     if (resultadoDiv) {
-      resultadoDiv.innerHTML = '<span class="error-verificacion">❌ Base de datos no disponible. Intenta recargar la página.</span>';
+      resultadoDiv.innerHTML = '<span class="error-verificacion">Base de datos no disponible. Intenta recargar.</span>';
     }
     return;
   }
   
   const socio = buscarSocio(busqueda);
-  
+
+  setTimeout(() => {
+    if (btnVerificar) btnVerificar.classList.remove('boton-cargando');
+  }, 300);
+
   if (socio) {
     if (socio.estado !== 'activo') {
       if (resultadoDiv) {
-        resultadoDiv.innerHTML = '<span class="error-verificacion">❌ Este socio no está activo. Contacta a administración.</span>';
+        resultadoDiv.innerHTML = '<span class="error-verificacion">Este socio no está activo. Contacta a administración.</span>';
       }
       if (datosContainer) datosContainer.classList.add('oculto');
       socioVerificado = null;
@@ -1321,25 +1329,17 @@ function mostrarToast(mensaje) {
 function mostrarCargando(mostrar) {
   const btnConfirmar = document.querySelector('.boton-confirmar-reserva');
   const btnMesa = document.querySelector('.boton-reservar-mesa');
-  
-  const botones = [btnConfirmar, btnMesa].filter(b => b);
-  
+  const btnWhatsapp = document.querySelector('.boton-whatsapp-reserva');
+
+  const botones = [btnConfirmar, btnMesa, btnWhatsapp].filter(b => b);
+
   botones.forEach(btn => {
     if (mostrar) {
+      btn.classList.add('boton-cargando');
       btn.disabled = true;
-      btn.setAttribute('data-texto-original', btn.innerHTML);
-      btn.innerHTML = `
-        <svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-        </svg>
-        Guardando...
-      `;
     } else {
+      btn.classList.remove('boton-cargando');
       btn.disabled = false;
-      const textoOriginal = btn.getAttribute('data-texto-original');
-      if (textoOriginal) {
-        btn.innerHTML = textoOriginal;
-      }
     }
   });
 }

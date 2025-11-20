@@ -2298,6 +2298,40 @@ button {
   background: linear-gradient(180deg, var(--dorado), #b8963a);
 }
 
+.boton-admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  margin-left: 15px;
+}
+
+.boton-admin-header:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.boton-admin-header svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--dorado-claro);
+}
+
+@media (max-width: 900px) {
+  .boton-admin-header {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
 /* ==========================================================
    PREVENCIÓN DE ZOOM EN INPUTS MÓVILES
    ========================================================== */
