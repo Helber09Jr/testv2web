@@ -4,10 +4,23 @@
    ========================================================== */
 
 // ==========================================================
+// IMPORTACIÓN DEL SISTEMA DE ETIQUETAS
+// ==========================================================
+
+import {
+  inicializarSistemaEtiquetas,
+  generarHTMLEtiquetas,
+  generarHTMLEtiquetasModal,
+  estaAgotado,
+  actualizarEtiquetasEnGrilla
+} from './carta-hibrido.js';
+
+// ==========================================================
 // VARIABLES GLOBALES
 // ==========================================================
 
 let datosMenu = null;
+let sistemaEtiquetasListo = false;
 let platosFiltrados = [];
 let categoriaActual = 'todos';
 let vistaActual = 'detallada';
@@ -31,19 +44,43 @@ async function cargarDatosMenu() {
       throw new Error('Error al cargar el menú');
     }
     datosMenu = await response.json();
-    
+
     // Cargar mozos en el carrito
     if (typeof cargarMozos === 'function' && datosMenu.mozos) {
       cargarMozos(datosMenu.mozos);
     }
-    
+
     // Renderizar categorías y platos
     renderizarCategorias();
     filtrarYRenderizarPlatos();
-    
+
+    // Inicializar sistema de etiquetas (híbrido con Firebase)
+    await inicializarEtiquetas();
+
   } catch (error) {
     console.error('Error cargando menú:', error);
     mostrarErrorCarga();
+  }
+}
+
+/**
+ * Inicializa el sistema de etiquetas con Firebase
+ */
+async function inicializarEtiquetas() {
+  try {
+    const resultado = await inicializarSistemaEtiquetas(() => {
+      // Callback cuando hay actualizaciones en tiempo real
+      actualizarEtiquetasEnGrilla();
+    });
+
+    if (resultado.exito) {
+      sistemaEtiquetasListo = true;
+      // Actualizar las tarjetas con las etiquetas
+      actualizarEtiquetasEnGrilla();
+      console.log('✅ Sistema de etiquetas integrado');
+    }
+  } catch (error) {
+    console.warn('Sistema de etiquetas no disponible:', error);
   }
 }
 
@@ -236,10 +273,17 @@ function renderizarPlatos() {
 function crearTarjetaDetallada(plato) {
   const categoria = datosMenu.categorias.find(c => c.id === plato.categoria);
   const nombreCategoria = categoria ? categoria.nombre : plato.categoria;
-  
+
+  // Verificar si el plato está agotado
+  const claseAgotado = sistemaEtiquetasListo && estaAgotado(plato.id) ? 'agotado' : '';
+
+  // Generar etiquetas si el sistema está listo
+  const htmlEtiquetas = sistemaEtiquetasListo ? generarHTMLEtiquetas(plato.id) : '';
+
   return `
-    <article class="tarjeta-plato" data-plato-id="${plato.id}" tabindex="0">
+    <article class="tarjeta-plato ${claseAgotado}" data-plato-id="${plato.id}" tabindex="0">
       <div class="tarjeta-plato-imagen">
+        ${htmlEtiquetas}
         <img src="${plato.imagen}" alt="${plato.nombre}" loading="lazy">
         <span class="badge-categoria">${nombreCategoria}</span>
         <button class="btn-vista-previa" data-plato-id="${plato.id}" aria-label="Ver imagen grande de ${plato.nombre}">
@@ -270,9 +314,16 @@ function crearTarjetaSimple(plato) {
   // Obtener icono de la categoría del plato
   const categoria = datosMenu.categorias.find(c => c.id === plato.categoria);
   const iconoCategoria = categoria ? categoria.icono : '🍽️';
-  
+
+  // Verificar si el plato está agotado
+  const claseAgotado = sistemaEtiquetasListo && estaAgotado(plato.id) ? 'agotado' : '';
+
+  // Generar etiquetas compactas para vista simple
+  const htmlEtiquetas = sistemaEtiquetasListo ? generarHTMLEtiquetas(plato.id, { maxEtiquetas: 2 }) : '';
+
   return `
-    <div class="tarjeta-plato-simple" data-plato-id="${plato.id}" tabindex="0">
+    <div class="tarjeta-plato-simple ${claseAgotado}" data-plato-id="${plato.id}" tabindex="0">
+      ${htmlEtiquetas}
       <div class="plato-simple-info">
         <span class="plato-simple-icono">${iconoCategoria}</span>
         <span class="plato-simple-nombre">${plato.nombre}</span>
@@ -509,7 +560,10 @@ function abrirModalPlato(platoId) {
   if (titulo) titulo.textContent = plato.nombre;
   if (precio) precio.textContent = `S/ ${plato.precio.toFixed(2)}`;
   if (descripcion) descripcion.textContent = plato.descripcion;
-  
+
+  // Renderizar etiquetas en el modal
+  renderizarEtiquetasModal(plato.id);
+
   // Renderizar opciones
   renderizarOpciones(plato);
   
@@ -598,6 +652,36 @@ function formatearNombreOpcion(key) {
     'tipo': 'Tipo'
   };
   return nombres[key] || key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+/**
+ * Renderiza las etiquetas en el modal del plato
+ */
+function renderizarEtiquetasModal(platoId) {
+  // Buscar o crear contenedor de etiquetas en el modal
+  let contenedor = document.getElementById('modalEtiquetasContainer');
+
+  if (!contenedor) {
+    // Crear contenedor si no existe
+    const modalHeader = document.querySelector('.modal-plato-header');
+    if (modalHeader) {
+      contenedor = document.createElement('div');
+      contenedor.id = 'modalEtiquetasContainer';
+      contenedor.className = 'modal-etiquetas-container';
+      modalHeader.insertAdjacentElement('afterend', contenedor);
+    }
+  }
+
+  if (!contenedor) return;
+
+  // Generar y mostrar etiquetas
+  if (sistemaEtiquetasListo) {
+    const htmlEtiquetas = generarHTMLEtiquetasModal(platoId);
+    contenedor.innerHTML = htmlEtiquetas;
+    contenedor.style.display = htmlEtiquetas ? 'block' : 'none';
+  } else {
+    contenedor.style.display = 'none';
+  }
 }
 
 function renderizarGuarniciones(plato) {

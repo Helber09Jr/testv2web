@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/estilos-carta.css">
+  <link rel="stylesheet" href="css/estilos-etiquetas.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 
@@ -381,7 +382,9 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/carta.js"></script>
+  <script type="module" src="js/carta.js"></script>
   <script src="js/carrito.js"></script>
+  <!-- Script de migración (solo para ejecutar una vez en consola) -->
+  <script type="module" src="js/migracion-firebase.js"></script>
 </body>
 </html>
