@@ -9,18 +9,19 @@
 // ==========================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  getFirestore,
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
   onSnapshot,
   serverTimestamp,
   Timestamp
@@ -65,11 +66,12 @@ export {
   db,
   auth,
   app,
-  
+
   // Funciones de Firestore
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   getDoc,
@@ -80,7 +82,7 @@ export {
   onSnapshot,
   serverTimestamp,
   Timestamp,
-  
+
   // Funciones de Auth
   signInWithEmailAndPassword,
   signOut,
