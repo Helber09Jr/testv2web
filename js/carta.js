@@ -70,13 +70,14 @@ async function inicializarEtiquetas() {
   try {
     const resultado = await inicializarSistemaEtiquetas(() => {
       // Callback cuando hay actualizaciones en tiempo real
-      actualizarEtiquetasEnGrilla();
+      // Re-renderizar platos para mostrar etiquetas actualizadas
+      renderizarPlatos();
     });
 
     if (resultado.exito) {
       sistemaEtiquetasListo = true;
-      // Actualizar las tarjetas con las etiquetas
-      actualizarEtiquetasEnGrilla();
+      // Re-renderizar platos con las etiquetas
+      renderizarPlatos();
       console.log('✅ Sistema de etiquetas integrado');
     }
   } catch (error) {
