@@ -29,6 +29,10 @@ let vistaActual = 'detallada';
 let platoSeleccionado = null;
 let cantidadSeleccionada = 1;
 
+// Variables para galería de imágenes
+let galeriaImagenes = [];
+let galeriaIndiceActual = 0;
+
 // ==========================================================
 // INICIALIZACIÓN
 // ==========================================================
@@ -472,19 +476,19 @@ function actualizarContador() {
 function inicializarModalVistaPrevia() {
   const modal = document.getElementById('modalVistaPrevia');
   if (!modal) return;
-  
+
   const btnCerrar = document.getElementById('btnCerrarVistaPrevia');
   const overlay = modal.querySelector('.modal-overlay-vista');
   const btnAgregar = document.getElementById('btnAgregarDesdeVista');
-  
+
   if (btnCerrar) {
     btnCerrar.onclick = cerrarModalVistaPrevia;
   }
-  
+
   if (overlay) {
     overlay.onclick = cerrarModalVistaPrevia;
   }
-  
+
   if (btnAgregar) {
     btnAgregar.onclick = () => {
       const platoId = btnAgregar.getAttribute('data-plato-id');
@@ -494,40 +498,178 @@ function inicializarModalVistaPrevia() {
       }, 300);
     };
   }
-  
+
+  // Eventos de galería
+  const btnAnterior = document.getElementById('btnGaleriaAnterior');
+  const btnSiguiente = document.getElementById('btnGaleriaSiguiente');
+
+  if (btnAnterior) {
+    btnAnterior.onclick = (e) => {
+      e.stopPropagation();
+      navegarGaleria(-1);
+    };
+  }
+
+  if (btnSiguiente) {
+    btnSiguiente.onclick = (e) => {
+      e.stopPropagation();
+      navegarGaleria(1);
+    };
+  }
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('activo')) {
-      cerrarModalVistaPrevia();
+    if (modal.classList.contains('activo')) {
+      if (e.key === 'Escape') {
+        cerrarModalVistaPrevia();
+      } else if (e.key === 'ArrowLeft' && galeriaImagenes.length > 1) {
+        navegarGaleria(-1);
+      } else if (e.key === 'ArrowRight' && galeriaImagenes.length > 1) {
+        navegarGaleria(1);
+      }
     }
   });
 }
 
 function abrirModalVistaPrevia(platoId) {
   if (!datosMenu || !datosMenu.platos) return;
-  
+
   const plato = datosMenu.platos.find(p => p.id === platoId);
   if (!plato) return;
-  
+
   const modal = document.getElementById('modalVistaPrevia');
   if (!modal) return;
-  
+
+  // Configurar galería de imágenes
+  if (plato.imagenes && Array.isArray(plato.imagenes) && plato.imagenes.length > 0) {
+    galeriaImagenes = plato.imagenes;
+  } else {
+    galeriaImagenes = [plato.imagen];
+  }
+  galeriaIndiceActual = 0;
+
   const img = document.getElementById('vistaPreviaImg');
   const titulo = document.getElementById('vistaPreviaTitulo');
   const precio = document.getElementById('vistaPreviaPrecio');
   const descripcion = document.getElementById('vistaPreviaDescripcion');
   const btnAgregar = document.getElementById('btnAgregarDesdeVista');
-  
+
   if (img) {
-    img.src = plato.imagen;
+    img.src = galeriaImagenes[0];
     img.alt = plato.nombre;
   }
   if (titulo) titulo.textContent = plato.nombre;
   if (precio) precio.textContent = `S/ ${plato.precio.toFixed(2)}`;
   if (descripcion) descripcion.textContent = plato.descripcion;
   if (btnAgregar) btnAgregar.setAttribute('data-plato-id', platoId);
-  
+
+  // Configurar controles de galería
+  configurarControlesGaleria();
+
   modal.classList.add('activo');
   document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Configura la visibilidad y estado de los controles de galería
+ */
+function configurarControlesGaleria() {
+  const btnAnterior = document.getElementById('btnGaleriaAnterior');
+  const btnSiguiente = document.getElementById('btnGaleriaSiguiente');
+  const indicadores = document.getElementById('galeriaIndicadores');
+  const contador = document.getElementById('galeriaContador');
+
+  const tieneMultiples = galeriaImagenes.length > 1;
+
+  // Mostrar/ocultar botones de navegación
+  if (btnAnterior) {
+    btnAnterior.style.display = tieneMultiples ? 'flex' : 'none';
+  }
+  if (btnSiguiente) {
+    btnSiguiente.style.display = tieneMultiples ? 'flex' : 'none';
+  }
+
+  // Mostrar/ocultar contador
+  if (contador) {
+    contador.style.display = tieneMultiples ? 'block' : 'none';
+    contador.textContent = `1/${galeriaImagenes.length}`;
+  }
+
+  // Generar indicadores
+  if (indicadores) {
+    if (tieneMultiples) {
+      indicadores.style.display = 'flex';
+      indicadores.innerHTML = galeriaImagenes.map((_, index) => `
+        <button class="galeria-indicador ${index === 0 ? 'activo' : ''}"
+                data-index="${index}"
+                aria-label="Ir a imagen ${index + 1}">
+        </button>
+      `).join('');
+
+      // Agregar eventos a indicadores
+      indicadores.querySelectorAll('.galeria-indicador').forEach(indicador => {
+        indicador.onclick = (e) => {
+          e.stopPropagation();
+          const index = parseInt(indicador.getAttribute('data-index'));
+          irAImagenGaleria(index);
+        };
+      });
+    } else {
+      indicadores.style.display = 'none';
+      indicadores.innerHTML = '';
+    }
+  }
+}
+
+/**
+ * Navega a la imagen anterior o siguiente
+ */
+function navegarGaleria(direccion) {
+  if (galeriaImagenes.length <= 1) return;
+
+  let nuevoIndice = galeriaIndiceActual + direccion;
+
+  // Loop circular
+  if (nuevoIndice < 0) {
+    nuevoIndice = galeriaImagenes.length - 1;
+  } else if (nuevoIndice >= galeriaImagenes.length) {
+    nuevoIndice = 0;
+  }
+
+  irAImagenGaleria(nuevoIndice);
+}
+
+/**
+ * Va a una imagen específica de la galería
+ */
+function irAImagenGaleria(indice) {
+  if (indice < 0 || indice >= galeriaImagenes.length) return;
+
+  galeriaIndiceActual = indice;
+
+  const img = document.getElementById('vistaPreviaImg');
+  const contador = document.getElementById('galeriaContador');
+  const indicadores = document.getElementById('galeriaIndicadores');
+
+  // Animación de cambio
+  if (img) {
+    img.classList.add('cambiando');
+    setTimeout(() => {
+      img.src = galeriaImagenes[indice];
+      img.classList.remove('cambiando');
+    }, 150);
+  }
+
+  // Actualizar contador
+  if (contador) {
+    contador.textContent = `${indice + 1}/${galeriaImagenes.length}`;
+  }
+
+  // Actualizar indicadores
+  if (indicadores) {
+    indicadores.querySelectorAll('.galeria-indicador').forEach((indicador, i) => {
+      indicador.classList.toggle('activo', i === indice);
+    });
+  }
 }
 
 function cerrarModalVistaPrevia() {
@@ -928,3 +1070,5 @@ window.abrirModalPlato = abrirModalPlato;
 window.abrirModalVistaPrevia = abrirModalVistaPrevia;
 window.cerrarModalPlato = cerrarModalPlato;
 window.cerrarModalVistaPrevia = cerrarModalVistaPrevia;
+window.navegarGaleria = navegarGaleria;
+window.irAImagenGaleria = irAImagenGaleria;

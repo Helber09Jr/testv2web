@@ -166,7 +166,7 @@
     </div>
   </main>
 
-  <!-- Modal de vista previa (imagen grande) -->
+  <!-- Modal de vista previa (imagen grande) con galería -->
   <div id="modalVistaPrevia" class="modal-vista-previa" role="dialog" aria-modal="true" aria-labelledby="vistaPreviaTitulo">
     <div class="modal-overlay-vista"></div>
     <div class="modal-contenido-vista">
@@ -176,8 +176,23 @@
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <div class="modal-vista-imagen">
+      <div class="modal-vista-imagen galeria-container">
         <img id="vistaPreviaImg" src="" alt="Vista previa del plato">
+        <!-- Controles de navegación de galería -->
+        <button id="btnGaleriaAnterior" class="galeria-nav galeria-anterior" aria-label="Imagen anterior" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button id="btnGaleriaSiguiente" class="galeria-nav galeria-siguiente" aria-label="Imagen siguiente" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        <!-- Indicadores de galería -->
+        <div id="galeriaIndicadores" class="galeria-indicadores" style="display: none;"></div>
+        <!-- Contador de imágenes -->
+        <div id="galeriaContador" class="galeria-contador" style="display: none;">1/1</div>
       </div>
       <div class="modal-vista-info">
         <h3 id="vistaPreviaTitulo" class="modal-vista-nombre">Nombre del Plato</h3>

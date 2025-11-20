@@ -1183,6 +1183,135 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+/* ==========================================================
+   GALERÍA DE IMÁGENES
+   ========================================================== */
+.galeria-container {
+  position: relative;
+}
+
+.galeria-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.galeria-nav svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--azul-principal);
+}
+
+.galeria-nav:hover {
+  background: var(--azul-principal);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.galeria-nav:hover svg {
+  stroke: var(--blanco);
+}
+
+.galeria-anterior {
+  left: 10px;
+}
+
+.galeria-siguiente {
+  right: 10px;
+}
+
+.galeria-indicadores {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.galeria-indicador {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.galeria-indicador:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.galeria-indicador.activo {
+  background: var(--blanco);
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.galeria-contador {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--blanco);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 10;
+}
+
+/* Animación de cambio de imagen */
+.galeria-container img.cambiando {
+  opacity: 0.5;
+}
+
+/* Responsive galería */
+@media (max-width: 480px) {
+  .galeria-nav {
+    width: 34px;
+    height: 34px;
+  }
+
+  .galeria-nav svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .galeria-anterior {
+    left: 8px;
+  }
+
+  .galeria-siguiente {
+    right: 8px;
+  }
+
+  .galeria-indicador {
+    width: 6px;
+    height: 6px;
+  }
+
+  .galeria-contador {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
 }
 
 .modal-vista-info {
@@ -2388,11 +2517,12 @@ button {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Botón de cerrar siempre visible */
+  /* Botón de cerrar mantener absolute en móvil */
   .boton-cerrar-modal,
   .boton-cerrar-vista {
-    position: sticky;
+    position: absolute;
     top: 8px;
+    right: 8px;
     z-index: 100;
   }
 }
