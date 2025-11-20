@@ -446,21 +446,63 @@ a {
   align-items: center;
 }
 
-.info-texto { text-align: left; }
-.descripcion-principal { font-size: 1.08rem; color: #555; line-height: 1.9; }
-.etiqueta-seccion { display: inline-block; font-size: 0.85rem; font-weight: 800; color: var(--verde-acento); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; }
-.titulo-seccion { 
-  font-size: 2.4rem; 
-  font-weight: 800; 
-  color: var(--azul-principal); 
-  margin-bottom: 18px; 
-  font-family: 'Playfair Display', serif; 
-  letter-spacing: 1.5px; 
-  line-height: 1.1; 
+.info-texto {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.linea-decorativa { width: 70px; height: 4px; background: linear-gradient(90deg, var(--dorado-claro), var(--dorado), transparent); margin-bottom: 25px; border-radius: 2px; }
-.encabezado-seccion.centrado { text-align: center; }
-.encabezado-seccion.centrado .linea-decorativa { margin: 0 auto 25px; }
+
+.encabezado-seccion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.etiqueta-seccion {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--verde-acento);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: 12px;
+}
+
+.titulo-seccion {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--azul-principal);
+  margin-bottom: 18px;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+}
+
+.linea-decorativa {
+  width: 70px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--dorado-claro), var(--dorado), transparent);
+  margin-bottom: 25px;
+  border-radius: 2px;
+}
+
+.descripcion-principal {
+  font-size: 1.08rem;
+  color: #555;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.encabezado-seccion.centrado {
+  text-align: center;
+  align-items: center;
+}
+
+.encabezado-seccion.centrado .linea-decorativa {
+  margin: 0 auto 25px;
+}
 
 .tarjeta-horarios-compacta {
   display: flex;
@@ -1574,21 +1616,25 @@ a {
 
   .info-texto {
     text-align: center;
+    align-items: center;
   }
 
   .encabezado-seccion {
     margin-bottom: 12px;
+    align-items: center;
   }
 
   .etiqueta-seccion {
     font-size: 0.75rem;
     letter-spacing: 2px;
     margin-bottom: 8px;
+    text-align: center;
   }
 
   .titulo-seccion {
     font-size: 1.4rem;
     margin-bottom: 12px;
+    text-align: center;
   }
 
   .linea-decorativa {
@@ -1600,6 +1646,7 @@ a {
   .descripcion-principal {
     font-size: 0.9rem;
     line-height: 1.7;
+    text-align: center;
   }
 
   /* Tarjeta de horarios más compacta */

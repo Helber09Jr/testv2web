@@ -1739,6 +1739,33 @@ button {
   .error-verificacion {
     font-size: 0.8rem;
   }
+
+  /* Fix overflow del input y botón verificar */
+  .seccion-validacion-socio {
+    overflow: hidden;
+  }
+
+  .fila-campos {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .campo-formulario {
+    width: 100%;
+  }
+
+  .campo-formulario input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .boton-verificar-socio {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    height: 42px;
+  }
 }
 
 .campo-boton {
