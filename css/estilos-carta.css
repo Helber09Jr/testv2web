@@ -380,6 +380,18 @@ button {
   min-height: 60vh;
 }
 
+@media (max-width: 768px) {
+  .seccion-carta {
+    padding: 30px 10px 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seccion-carta {
+    padding: 20px 8px 40px;
+  }
+}
+
 .contenedor-carta {
   max-width: 1300px;
   margin: 0 auto;
@@ -1272,6 +1284,28 @@ button {
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .modal-contenido-plato {
+    border-radius: 16px;
+  }
+
+  .modal-plato-grid {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-contenido-plato {
+    border-radius: 12px;
+    margin: 5px;
+  }
+
+  .modal-plato-grid {
+    border-radius: 12px;
+  }
+}
+
 @keyframes slideUp {
   from { 
     opacity: 0; 
@@ -1323,6 +1357,7 @@ button {
   grid-template-columns: 280px 1fr;
   flex: 1;
   overflow: hidden;
+  min-height: 0;
 }
 
 .modal-plato-imagen {
