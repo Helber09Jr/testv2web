@@ -9,7 +9,9 @@ import {
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -30,6 +32,13 @@ let reservasData = [];
 let reservasFiltradas = [];
 let reservaSeleccionada = null;
 let unsubscribeReservas = null;
+
+// Variables para gestión de carta
+let platosData = [];
+let platosFiltrados = [];
+let estadosPlatosData = {};
+let etiquetasData = {};
+let platoSeleccionado = null;
 
 // ==========================================================
 // INICIALIZACIÓN
@@ -74,15 +83,17 @@ function inicializarEventos() {
       iniciarSesion();
     };
   }
-  
+
   const btnCerrarSesion = document.getElementById('btnCerrarSesion');
   if (btnCerrarSesion) {
     btnCerrarSesion.onclick = cerrarSesion;
   }
-  
+
   inicializarFiltros();
   inicializarModal();
   inicializarReservaManual();
+  inicializarTabs();
+  inicializarGestionCarta();
 }
 
 async function iniciarSesion() {
@@ -1002,7 +1013,342 @@ function mostrarToast(mensaje) {
 }
 
 // ==========================================================
+// NAVEGACIÓN POR PESTAÑAS
+// ==========================================================
+
+function inicializarTabs() {
+  const tabs = document.querySelectorAll('.tab-admin');
+
+  tabs.forEach(tab => {
+    tab.onclick = () => {
+      const tabId = tab.getAttribute('data-tab');
+
+      // Actualizar pestañas activas
+      tabs.forEach(t => t.classList.remove('activo'));
+      tab.classList.add('activo');
+
+      // Mostrar contenido correspondiente
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('activo');
+      });
+
+      const tabContent = document.getElementById(`tab${capitalizarTexto(tabId)}`);
+      if (tabContent) {
+        tabContent.classList.add('activo');
+      }
+
+      // Cargar datos de carta si es la primera vez
+      if (tabId === 'carta' && platosData.length === 0) {
+        cargarDatosCarta();
+      }
+    };
+  });
+}
+
+// ==========================================================
+// GESTIÓN DE CARTA - ETIQUETAS
+// ==========================================================
+
+function inicializarGestionCarta() {
+  // Filtros de carta
+  const filtroCategoria = document.getElementById('filtroCategoriaCarta');
+  const filtroBusqueda = document.getElementById('filtroBusquedaCarta');
+  const filtroEtiqueta = document.getElementById('filtroEtiquetaCarta');
+
+  if (filtroCategoria) filtroCategoria.onchange = aplicarFiltrosCarta;
+  if (filtroBusqueda) filtroBusqueda.oninput = aplicarFiltrosCarta;
+  if (filtroEtiqueta) filtroEtiqueta.onchange = aplicarFiltrosCarta;
+
+  // Modal de etiquetas
+  const btnCerrarEtiquetas = document.getElementById('btnCerrarEditarEtiquetas');
+  const btnCancelarEtiquetas = document.getElementById('btnCancelarEtiquetas');
+  const btnGuardarEtiquetas = document.getElementById('btnGuardarEtiquetas');
+  const modalOverlay = document.querySelector('#modalEditarEtiquetas .modal-overlay-admin');
+
+  if (btnCerrarEtiquetas) btnCerrarEtiquetas.onclick = cerrarModalEtiquetas;
+  if (btnCancelarEtiquetas) btnCancelarEtiquetas.onclick = cerrarModalEtiquetas;
+  if (btnGuardarEtiquetas) btnGuardarEtiquetas.onclick = guardarEtiquetasPlato;
+  if (modalOverlay) modalOverlay.onclick = cerrarModalEtiquetas;
+}
+
+async function cargarDatosCarta() {
+  try {
+    mostrarToast('Cargando platos...');
+
+    // Cargar platos desde carta.json
+    const responsePlatos = await fetch('data/carta.json');
+    if (!responsePlatos.ok) throw new Error('Error al cargar carta.json');
+    const dataPlatos = await responsePlatos.json();
+
+    // Aplanar todos los platos de todas las categorías
+    platosData = [];
+    if (dataPlatos.categorias) {
+      dataPlatos.categorias.forEach(categoria => {
+        if (categoria.platos) {
+          categoria.platos.forEach(plato => {
+            platosData.push({
+              ...plato,
+              categoria: categoria.nombre,
+              categoriaId: categoria.id
+            });
+          });
+        }
+      });
+    }
+
+    // Llenar select de categorías
+    const selectCategoria = document.getElementById('filtroCategoriaCarta');
+    if (selectCategoria && dataPlatos.categorias) {
+      selectCategoria.innerHTML = '<option value="">Todas</option>';
+      dataPlatos.categorias.forEach(cat => {
+        selectCategoria.innerHTML += `<option value="${cat.id}">${cat.nombre}</option>`;
+      });
+    }
+
+    // Cargar estados de platos desde Firebase
+    await cargarEstadosPlatos();
+
+    // Cargar etiquetas disponibles
+    await cargarEtiquetasDisponibles();
+
+    platosFiltrados = [...platosData];
+    renderizarPlatos();
+
+    console.log(`✅ Cargados ${platosData.length} platos`);
+
+  } catch (error) {
+    console.error('Error al cargar datos de carta:', error);
+    mostrarToast('Error al cargar los platos');
+  }
+}
+
+async function cargarEstadosPlatos() {
+  try {
+    const estadosSnapshot = await getDocs(collection(db, 'estadosPlatos'));
+    estadosPlatosData = {};
+
+    estadosSnapshot.forEach(doc => {
+      estadosPlatosData[doc.id] = doc.data().etiquetas || [];
+    });
+
+    console.log(`📋 Estados cargados: ${Object.keys(estadosPlatosData).length}`);
+  } catch (error) {
+    console.error('Error al cargar estados de platos:', error);
+  }
+}
+
+async function cargarEtiquetasDisponibles() {
+  try {
+    const etiquetasSnapshot = await getDocs(collection(db, 'etiquetas'));
+    etiquetasData = {};
+
+    etiquetasSnapshot.forEach(doc => {
+      etiquetasData[doc.id] = doc.data();
+    });
+
+    console.log(`🏷️ Etiquetas disponibles: ${Object.keys(etiquetasData).length}`);
+  } catch (error) {
+    console.error('Error al cargar etiquetas:', error);
+  }
+}
+
+function aplicarFiltrosCarta() {
+  const categoria = document.getElementById('filtroCategoriaCarta')?.value || '';
+  const busqueda = document.getElementById('filtroBusquedaCarta')?.value.toLowerCase().trim() || '';
+  const etiqueta = document.getElementById('filtroEtiquetaCarta')?.value || '';
+
+  platosFiltrados = platosData.filter(plato => {
+    // Filtro por categoría
+    if (categoria && plato.categoriaId !== categoria) {
+      return false;
+    }
+
+    // Filtro por búsqueda
+    if (busqueda) {
+      const nombre = plato.nombre?.toLowerCase() || '';
+      const descripcion = plato.descripcion?.toLowerCase() || '';
+      if (!nombre.includes(busqueda) && !descripcion.includes(busqueda)) {
+        return false;
+      }
+    }
+
+    // Filtro por etiqueta
+    if (etiqueta) {
+      const etiquetasPlato = estadosPlatosData[plato.id] || [];
+      if (!etiquetasPlato.includes(etiqueta)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  renderizarPlatos();
+}
+
+function renderizarPlatos() {
+  const contenedor = document.getElementById('listaPlatosAdmin');
+  const sinResultados = document.getElementById('sinPlatosCarta');
+  const contador = document.getElementById('contadorPlatosCarta');
+
+  if (!contenedor) return;
+
+  contador.textContent = `${platosFiltrados.length} plato${platosFiltrados.length !== 1 ? 's' : ''}`;
+
+  if (platosFiltrados.length === 0) {
+    contenedor.innerHTML = '';
+    if (sinResultados) sinResultados.classList.remove('oculto');
+    return;
+  }
+
+  if (sinResultados) sinResultados.classList.add('oculto');
+
+  let html = '';
+
+  platosFiltrados.forEach(plato => {
+    const etiquetasPlato = estadosPlatosData[plato.id] || [];
+    const imagen = plato.imagen || 'imagenes/platos/default.jpg';
+
+    // Generar mini etiquetas
+    let etiquetasHtml = '';
+    etiquetasPlato.forEach(etiquetaId => {
+      const etiquetaInfo = etiquetasData[etiquetaId];
+      const nombreEtiqueta = etiquetaInfo?.nombre || capitalizarTexto(etiquetaId);
+      etiquetasHtml += `<span class="mini-etiqueta ${etiquetaId}">${nombreEtiqueta}</span>`;
+    });
+
+    if (etiquetasPlato.length === 0) {
+      etiquetasHtml = '<span style="color: #999; font-size: 0.75rem;">Sin etiquetas</span>';
+    }
+
+    html += `
+      <div class="tarjeta-plato-admin" data-id="${plato.id}">
+        <img src="${imagen}" alt="${plato.nombre}" class="plato-imagen-admin"
+             onerror="this.src='imagenes/platos/default.jpg'">
+        <div class="plato-info-admin">
+          <div class="plato-nombre-admin">${plato.nombre}</div>
+          <div class="plato-categoria-admin">${plato.categoria} - S/ ${plato.precio?.toFixed(2) || '0.00'}</div>
+          <div class="plato-etiquetas-actuales">
+            ${etiquetasHtml}
+          </div>
+        </div>
+        <button class="boton-editar-etiquetas" onclick="window.abrirModalEtiquetas('${plato.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Editar
+        </button>
+      </div>
+    `;
+  });
+
+  contenedor.innerHTML = html;
+}
+
+function abrirModalEtiquetas(platoId) {
+  const plato = platosData.find(p => p.id === platoId);
+  if (!plato) {
+    mostrarToast('Plato no encontrado');
+    return;
+  }
+
+  platoSeleccionado = plato;
+  const etiquetasPlato = estadosPlatosData[platoId] || [];
+
+  // Actualizar título del modal
+  document.getElementById('modalEtiquetasTitulo').textContent = plato.nombre;
+  document.getElementById('modalEtiquetasPrecio').textContent = `S/ ${plato.precio?.toFixed(2) || '0.00'}`;
+
+  // Desmarcar todos los checkboxes
+  document.querySelectorAll('#modalEditarEtiquetas input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+  });
+
+  // Marcar los checkboxes de las etiquetas actuales
+  etiquetasPlato.forEach(etiquetaId => {
+    const checkbox = document.querySelector(`#modalEditarEtiquetas input[value="${etiquetaId}"]`);
+    if (checkbox) {
+      checkbox.checked = true;
+    }
+  });
+
+  // Mostrar modal
+  const modal = document.getElementById('modalEditarEtiquetas');
+  modal.classList.add('activo');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalEtiquetas() {
+  const modal = document.getElementById('modalEditarEtiquetas');
+  modal.classList.remove('activo');
+  document.body.style.overflow = 'auto';
+  platoSeleccionado = null;
+}
+
+async function guardarEtiquetasPlato() {
+  if (!platoSeleccionado) {
+    mostrarToast('No hay plato seleccionado');
+    return;
+  }
+
+  // Obtener etiquetas seleccionadas
+  const checkboxes = document.querySelectorAll('#modalEditarEtiquetas input[type="checkbox"]:checked');
+  const etiquetasSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+
+  try {
+    const btnGuardar = document.getElementById('btnGuardarEtiquetas');
+    btnGuardar.disabled = true;
+    btnGuardar.innerHTML = 'Guardando...';
+
+    // Guardar en Firebase
+    const estadoRef = doc(db, 'estadosPlatos', platoSeleccionado.id);
+    await setDoc(estadoRef, {
+      platoId: platoSeleccionado.id,
+      etiquetas: etiquetasSeleccionadas,
+      fechaActualizacion: serverTimestamp()
+    }, { merge: true });
+
+    // Actualizar datos locales
+    estadosPlatosData[platoSeleccionado.id] = etiquetasSeleccionadas;
+
+    // Re-renderizar lista
+    renderizarPlatos();
+
+    cerrarModalEtiquetas();
+    mostrarToast(`Etiquetas actualizadas para: ${platoSeleccionado.nombre}`);
+
+    // Restaurar botón
+    btnGuardar.disabled = false;
+    btnGuardar.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
+      Guardar Cambios
+    `;
+
+  } catch (error) {
+    console.error('Error al guardar etiquetas:', error);
+    mostrarToast('Error al guardar las etiquetas');
+
+    const btnGuardar = document.getElementById('btnGuardarEtiquetas');
+    btnGuardar.disabled = false;
+    btnGuardar.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
+      Guardar Cambios
+    `;
+  }
+}
+
+// ==========================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ==========================================================
 
 window.verDetalle = verDetalle;
+window.abrirModalEtiquetas = abrirModalEtiquetas;

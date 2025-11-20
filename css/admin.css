@@ -1474,6 +1474,333 @@ body {
 }
 
 /* ==========================================================
+   NAVEGACIÓN POR PESTAÑAS
+   ========================================================== */
+
+.nav-tabs-admin {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-admin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-admin:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-admin.activo {
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--dorado);
+}
+
+.tab-admin svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Contenido de pestañas */
+.tab-content {
+  display: none;
+}
+
+.tab-content.activo {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================
+   GESTIÓN DE CARTA - FILTROS
+   ========================================================== */
+
+.seccion-filtros-carta {
+  background: var(--blanco);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+/* ==========================================================
+   LISTA DE PLATOS ADMIN
+   ========================================================== */
+
+.seccion-platos-admin {
+  background: var(--blanco);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.lista-platos-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tarjeta-plato-admin {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.tarjeta-plato-admin:hover {
+  border-color: var(--azul-principal);
+  box-shadow: 0 4px 12px rgba(0, 82, 180, 0.1);
+}
+
+.plato-imagen-admin {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.plato-info-admin {
+  flex: 1;
+  min-width: 0;
+}
+
+.plato-nombre-admin {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plato-categoria-admin {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.plato-etiquetas-actuales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.mini-etiqueta {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.mini-etiqueta.nuevo { background: #3b82f6; }
+.mini-etiqueta.popular { background: #f59e0b; }
+.mini-etiqueta.agotado { background: #ef4444; }
+.mini-etiqueta.vegetariano { background: #22c55e; }
+.mini-etiqueta.vegano { background: #16a34a; }
+.mini-etiqueta.picante { background: #dc2626; }
+.mini-etiqueta.sin-gluten { background: #a855f7; }
+.mini-etiqueta.descuento { background: #14b8a6; }
+.mini-etiqueta.recomendado { background: #f97316; }
+.mini-etiqueta.disponible { background: #10b981; }
+.mini-etiqueta.proximamente { background: #8b5cf6; }
+.mini-etiqueta.promocion { background: #ec4899; }
+.mini-etiqueta.temporal { background: #6366f1; }
+
+.boton-editar-etiquetas {
+  padding: 10px 18px;
+  background: var(--azul-principal);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.boton-editar-etiquetas:hover {
+  background: var(--azul-oscuro);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 180, 0.3);
+}
+
+.boton-editar-etiquetas svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================================
+   MODAL EDITAR ETIQUETAS
+   ========================================================== */
+
+.modal-etiquetas-admin {
+  max-width: 600px;
+}
+
+.precio-plato-modal {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--verde-exito);
+  margin-top: 5px;
+}
+
+.grupo-etiquetas {
+  margin-bottom: 20px;
+}
+
+.grupo-etiquetas h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.opciones-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.opcion-etiqueta {
+  position: relative;
+  cursor: pointer;
+}
+
+.opcion-etiqueta input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.check-etiqueta {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #f0f0f0;
+  color: #555;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta {
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Colores de etiquetas cuando están seleccionadas */
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.disponible {
+  background: #10b981;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.agotado {
+  background: #ef4444;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.proximamente {
+  background: #8b5cf6;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.nuevo {
+  background: #3b82f6;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.popular {
+  background: #f59e0b;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.promocion {
+  background: #ec4899;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.descuento {
+  background: #14b8a6;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.recomendado {
+  background: #f97316;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.picante {
+  background: #dc2626;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.vegetariano {
+  background: #22c55e;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.vegano {
+  background: #16a34a;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.sin-gluten {
+  background: #a855f7;
+}
+
+.opcion-etiqueta input[type="checkbox"]:checked + .check-etiqueta.temporal {
+  background: #6366f1;
+}
+
+.check-etiqueta:hover {
+  background: #e0e0e0;
+}
+
+.opcion-etiqueta input[type="checkbox"]:focus + .check-etiqueta {
+  outline: 2px solid var(--azul-principal);
+  outline-offset: 2px;
+}
+
+.botones-modal-etiquetas {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* ==========================================================
    RESPONSIVE
    ========================================================== */
 
@@ -1495,34 +1822,86 @@ body {
     gap: 15px;
     text-align: center;
   }
-  
+
   .acciones-admin {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .contenido-admin {
     padding: 20px 15px;
   }
-  
+
   .contenedor-filtros {
     flex-direction: column;
   }
-  
+
   .filtro-item {
     width: 100%;
   }
-  
+
   .detalle-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .botones-estado {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .contenedor-login {
     padding: 35px 25px;
+  }
+
+  /* Tabs responsive */
+  .nav-tabs-admin {
+    padding: 10px 15px;
+    gap: 8px;
+  }
+
+  .tab-admin {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .tab-admin svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Lista de platos responsive */
+  .tarjeta-plato-admin {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .plato-imagen-admin {
+    width: 100%;
+    height: 120px;
+  }
+
+  .boton-editar-etiquetas {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Modal etiquetas responsive */
+  .opciones-etiquetas {
+    gap: 6px;
+  }
+
+  .check-etiqueta {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .botones-modal-etiquetas {
+    flex-direction: column;
+  }
+
+  .botones-modal-etiquetas .boton-cancelar-manual,
+  .botones-modal-etiquetas .boton-guardar-manual {
+    flex: none;
   }
 }
 
