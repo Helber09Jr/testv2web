@@ -12,6 +12,7 @@ import {
   generarHTMLEtiquetas,
   generarHTMLEtiquetasModal,
   estaAgotado,
+  tieneEtiqueta,
   actualizarEtiquetasEnGrilla
 } from './carta-hibrido.js';
 
@@ -23,6 +24,7 @@ let datosMenu = null;
 let sistemaEtiquetasListo = false;
 let platosFiltrados = [];
 let categoriaActual = 'todos';
+let etiquetaFiltroActual = 'todos';
 let vistaActual = 'detallada';
 let platoSeleccionado = null;
 let cantidadSeleccionada = 1;
@@ -173,9 +175,34 @@ function inicializarEventos() {
 
   // Modal de personalización
   inicializarModalPlato();
-  
+
   // Modal de vista previa
   inicializarModalVistaPrevia();
+
+  // Filtros por etiquetas
+  inicializarFiltrosEtiquetas();
+}
+
+/**
+ * Inicializa los filtros por etiquetas/estado
+ */
+function inicializarFiltrosEtiquetas() {
+  const contenedor = document.getElementById('filtrosEtiquetas');
+  if (!contenedor) return;
+
+  contenedor.querySelectorAll('.filtro-etiqueta-carta').forEach(boton => {
+    boton.onclick = () => {
+      // Actualizar estado activo
+      contenedor.querySelectorAll('.filtro-etiqueta-carta').forEach(b => {
+        b.classList.remove('activo');
+      });
+      boton.classList.add('activo');
+
+      // Actualizar filtro actual
+      etiquetaFiltroActual = boton.getAttribute('data-etiqueta');
+      filtrarYRenderizarPlatos();
+    };
+  });
 }
 
 // ==========================================================
@@ -225,22 +252,41 @@ function renderizarCategorias() {
 
 function filtrarYRenderizarPlatos() {
   if (!datosMenu || !datosMenu.platos) return;
-  
+
   const buscador = document.getElementById('buscadorPlatos');
   const busqueda = buscador ? buscador.value.toLowerCase().trim() : '';
-  
+
   platosFiltrados = datosMenu.platos.filter(plato => {
     // Filtro por categoría
     const cumpleCategoria = categoriaActual === 'todos' || plato.categoria === categoriaActual;
-    
+
     // Filtro por búsqueda
-    const cumpleBusqueda = !busqueda || 
+    const cumpleBusqueda = !busqueda ||
       plato.nombre.toLowerCase().includes(busqueda) ||
       plato.descripcion.toLowerCase().includes(busqueda);
-    
-    return cumpleCategoria && cumpleBusqueda;
+
+    // Filtro por etiqueta/estado
+    let cumpleEtiqueta = true;
+    if (sistemaEtiquetasListo && etiquetaFiltroActual !== 'todos') {
+      if (etiquetaFiltroActual === 'disponible') {
+        // Mostrar solo platos disponibles (sin etiqueta agotado ni proximamente)
+        cumpleEtiqueta = !estaAgotado(plato.id) && !tieneEtiqueta(plato.id, 'proximamente');
+      } else if (etiquetaFiltroActual === 'promociones') {
+        // Mostrar platos con promociones (nuevo, popular, 2x1, descuento, recomendado)
+        cumpleEtiqueta = tieneEtiqueta(plato.id, 'nuevo') ||
+                         tieneEtiqueta(plato.id, 'popular') ||
+                         tieneEtiqueta(plato.id, '2x1') ||
+                         tieneEtiqueta(plato.id, 'descuento') ||
+                         tieneEtiqueta(plato.id, 'recomendado');
+      } else if (etiquetaFiltroActual === 'agotado') {
+        // Mostrar solo platos agotados
+        cumpleEtiqueta = estaAgotado(plato.id);
+      }
+    }
+
+    return cumpleCategoria && cumpleBusqueda && cumpleEtiqueta;
   });
-  
+
   renderizarPlatos();
   actualizarContador();
 }
@@ -276,10 +322,14 @@ function crearTarjetaDetallada(plato) {
   const nombreCategoria = categoria ? categoria.nombre : plato.categoria;
 
   // Verificar si el plato está agotado
-  const claseAgotado = sistemaEtiquetasListo && estaAgotado(plato.id) ? 'agotado' : '';
+  const platoAgotado = sistemaEtiquetasListo && estaAgotado(plato.id);
+  const claseAgotado = platoAgotado ? 'agotado' : '';
 
   // Generar etiquetas si el sistema está listo
   const htmlEtiquetas = sistemaEtiquetasListo ? generarHTMLEtiquetas(plato.id) : '';
+
+  // Badge de temporalmente agotado
+  const badgeAgotado = platoAgotado ? '<div class="badge-agotado-overlay">Temporalmente agotado</div>' : '';
 
   return `
     <article class="tarjeta-plato ${claseAgotado}" data-plato-id="${plato.id}" tabindex="0">
@@ -293,13 +343,14 @@ function crearTarjetaDetallada(plato) {
             <circle cx="12" cy="12" r="3"></circle>
           </svg>
         </button>
+        ${badgeAgotado}
       </div>
       <div class="tarjeta-plato-contenido">
         <h3 class="tarjeta-plato-nombre">${plato.nombre}</h3>
         <p class="tarjeta-plato-descripcion">${plato.descripcion}</p>
         <div class="tarjeta-plato-footer">
           <span class="tarjeta-plato-precio">S/ ${plato.precio.toFixed(2)}</span>
-          <button class="btn-agregar-rapido" data-plato-id="${plato.id}" aria-label="Agregar ${plato.nombre} al carrito">
+          <button class="btn-agregar-rapido" data-plato-id="${plato.id}" aria-label="Agregar ${plato.nombre} al carrito" ${platoAgotado ? 'disabled' : ''}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -317,10 +368,14 @@ function crearTarjetaSimple(plato) {
   const iconoCategoria = categoria ? categoria.icono : '🍽️';
 
   // Verificar si el plato está agotado
-  const claseAgotado = sistemaEtiquetasListo && estaAgotado(plato.id) ? 'agotado' : '';
+  const platoAgotado = sistemaEtiquetasListo && estaAgotado(plato.id);
+  const claseAgotado = platoAgotado ? 'agotado' : '';
 
   // Generar etiquetas compactas para vista simple
   const htmlEtiquetas = sistemaEtiquetasListo ? generarHTMLEtiquetas(plato.id, { maxEtiquetas: 2 }) : '';
+
+  // Texto de agotado para vista simple
+  const textoAgotado = platoAgotado ? '<span class="texto-agotado-simple">Agotado</span>' : '';
 
   return `
     <div class="tarjeta-plato-simple ${claseAgotado}" data-plato-id="${plato.id}" tabindex="0">
@@ -328,10 +383,11 @@ function crearTarjetaSimple(plato) {
       <div class="plato-simple-info">
         <span class="plato-simple-icono">${iconoCategoria}</span>
         <span class="plato-simple-nombre">${plato.nombre}</span>
+        ${textoAgotado}
       </div>
       <div class="plato-simple-acciones">
         <span class="plato-simple-precio">S/ ${plato.precio.toFixed(2)}</span>
-        <button class="btn-agregar-simple" data-plato-id="${plato.id}" aria-label="Agregar ${plato.nombre}">
+        <button class="btn-agregar-simple" data-plato-id="${plato.id}" aria-label="Agregar ${plato.nombre}" ${platoAgotado ? 'disabled' : ''}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>

@@ -1117,6 +1117,7 @@ async function cargarDatosCarta() {
 
     platosFiltrados = [...platosData];
     renderizarPlatos();
+    actualizarEstadisticasCarta();
 
     console.log(`✅ Cargados ${platosData.length} platos`);
 
@@ -1225,6 +1226,11 @@ function renderizarPlatos() {
       etiquetasHtml = '<span style="color: #999; font-size: 0.75rem;">Sin etiquetas</span>';
     }
 
+    // Verificar si el plato está agotado
+    const estaAgotado = etiquetasPlato.includes('agotado');
+    const claseAgotado = estaAgotado ? 'activo' : '';
+    const tooltipAgotado = estaAgotado ? 'Quitar agotado' : 'Marcar agotado';
+
     html += `
       <div class="tarjeta-plato-admin" data-id="${plato.id}">
         <img src="${imagen}" alt="${plato.nombre}" class="plato-imagen-admin"
@@ -1236,13 +1242,22 @@ function renderizarPlatos() {
             ${etiquetasHtml}
           </div>
         </div>
-        <button class="boton-editar-etiquetas" onclick="window.abrirModalEtiquetas('${plato.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Editar
-        </button>
+        <div class="acciones-plato-admin">
+          <button class="boton-toggle-agotado ${claseAgotado}" data-tooltip="${tooltipAgotado}" onclick="window.toggleAgotado('${plato.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </button>
+          <button class="boton-editar-etiquetas" onclick="window.abrirModalEtiquetas('${plato.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Editar
+          </button>
+        </div>
       </div>
     `;
   });
@@ -1344,6 +1359,7 @@ async function guardarEtiquetasPlato() {
 
     // Re-renderizar lista
     renderizarPlatos();
+    actualizarEstadisticasCarta();
 
     cerrarModalEtiquetas();
     mostrarToast(`Etiquetas actualizadas para: ${nombrePlato}`);
@@ -1377,8 +1393,103 @@ async function guardarEtiquetasPlato() {
 }
 
 // ==========================================================
+// TOGGLE RÁPIDO DE AGOTADO
+// ==========================================================
+
+async function toggleAgotado(platoId) {
+  const plato = platosData.find(p => p.id === platoId);
+  if (!plato) {
+    mostrarToast('Plato no encontrado');
+    return;
+  }
+
+  try {
+    // Obtener etiquetas actuales
+    let etiquetasActuales = estadosPlatosData[platoId] || [];
+    let nuevasEtiquetas = [];
+
+    // Toggle agotado
+    if (etiquetasActuales.includes('agotado')) {
+      // Quitar agotado
+      nuevasEtiquetas = etiquetasActuales.filter(e => e !== 'agotado');
+    } else {
+      // Agregar agotado y quitar disponible/proximamente
+      nuevasEtiquetas = etiquetasActuales.filter(e => e !== 'disponible' && e !== 'proximamente');
+      nuevasEtiquetas.push('agotado');
+    }
+
+    // Guardar en Firebase
+    const estadoRef = doc(db, 'estadosPlatos', platoId);
+    await setDoc(estadoRef, {
+      platoId: platoId,
+      etiquetas: nuevasEtiquetas,
+      fechaActualizacion: serverTimestamp()
+    }, { merge: true });
+
+    // Actualizar datos locales
+    estadosPlatosData[platoId] = nuevasEtiquetas;
+
+    // Re-renderizar lista
+    renderizarPlatos();
+    actualizarEstadisticasCarta();
+
+    const estado = nuevasEtiquetas.includes('agotado') ? 'marcado como agotado' : 'marcado como disponible';
+    mostrarToast(`${plato.nombre}: ${estado}`);
+
+  } catch (error) {
+    console.error('Error al toggle agotado:', error);
+    mostrarToast('Error al actualizar el estado');
+  }
+}
+
+// ==========================================================
+// ESTADÍSTICAS DE CARTA
+// ==========================================================
+
+function actualizarEstadisticasCarta() {
+  if (platosData.length === 0) return;
+
+  let disponibles = 0;
+  let agotados = 0;
+  let promociones = 0;
+
+  platosData.forEach(plato => {
+    const etiquetas = estadosPlatosData[plato.id] || [];
+
+    // Contar agotados
+    if (etiquetas.includes('agotado')) {
+      agotados++;
+    } else if (!etiquetas.includes('proximamente')) {
+      // Disponibles son los que no están agotados ni próximamente
+      disponibles++;
+    }
+
+    // Contar promociones (nuevo, popular, 2x1, descuento, recomendado)
+    if (etiquetas.includes('nuevo') ||
+        etiquetas.includes('popular') ||
+        etiquetas.includes('2x1') ||
+        etiquetas.includes('descuento') ||
+        etiquetas.includes('recomendado')) {
+      promociones++;
+    }
+  });
+
+  // Actualizar contadores en el DOM
+  const elDisponibles = document.getElementById('totalDisponibles');
+  const elAgotados = document.getElementById('totalAgotados');
+  const elPromociones = document.getElementById('totalPromociones');
+  const elTotal = document.getElementById('totalPlatosCarta');
+
+  if (elDisponibles) elDisponibles.textContent = disponibles;
+  if (elAgotados) elAgotados.textContent = agotados;
+  if (elPromociones) elPromociones.textContent = promociones;
+  if (elTotal) elTotal.textContent = platosData.length;
+}
+
+// ==========================================================
 // EXPORTAR FUNCIONES GLOBALES
 // ==========================================================
 
 window.verDetalle = verDetalle;
 window.abrirModalEtiquetas = abrirModalEtiquetas;
+window.toggleAgotado = toggleAgotado;

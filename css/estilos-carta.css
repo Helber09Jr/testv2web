@@ -560,6 +560,94 @@ button {
   font-size: 1.1rem;
 }
 
+/* ==========================================================
+   FILTROS POR ETIQUETAS/ESTADO
+   ========================================================== */
+
+.filtros-etiquetas-carta {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dorado) transparent;
+  margin-bottom: 15px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filtros-etiquetas-carta::-webkit-scrollbar {
+  height: 4px;
+}
+
+.filtros-etiquetas-carta::-webkit-scrollbar-thumb {
+  background: var(--dorado);
+  border-radius: 10px;
+}
+
+.filtro-etiqueta-carta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--blanco);
+  border: 2px solid var(--gris-medio);
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.filtro-etiqueta-carta:hover {
+  border-color: var(--azul-suave);
+  color: var(--azul-principal);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 180, 0.15);
+}
+
+.filtro-etiqueta-carta.activo {
+  background: var(--azul-principal);
+  border-color: var(--azul-principal);
+  color: var(--blanco);
+  box-shadow: 0 4px 16px rgba(0, 82, 180, 0.3);
+}
+
+.filtro-etiqueta-carta:focus-visible {
+  outline: 3px solid var(--dorado-claro);
+  outline-offset: 2px;
+}
+
+/* Indicadores de estado en filtros */
+.indicador-disponible,
+.indicador-promocion,
+.indicador-agotado {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.indicador-disponible {
+  background: #10b981;
+}
+
+.indicador-promocion {
+  background: #f59e0b;
+}
+
+.indicador-agotado {
+  background: #ef4444;
+}
+
+.filtro-etiqueta-carta.activo .indicador-disponible,
+.filtro-etiqueta-carta.activo .indicador-promocion,
+.filtro-etiqueta-carta.activo .indicador-agotado {
+  background: var(--blanco);
+}
+
 /* Contador de resultados */
 .contador-resultados {
   font-size: 0.9rem;
@@ -571,6 +659,89 @@ button {
 #numResultados {
   font-weight: 700;
   color: var(--azul-principal);
+}
+
+/* ==========================================================
+   INDICADOR VISUAL MEJORADO DE AGOTADO
+   ========================================================== */
+
+/* Tarjeta agotada - Vista detallada */
+.tarjeta-plato.agotado {
+  position: relative;
+}
+
+.tarjeta-plato.agotado .tarjeta-plato-imagen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 6;
+}
+
+.tarjeta-plato.agotado .tarjeta-plato-contenido {
+  opacity: 0.7;
+}
+
+.tarjeta-plato.agotado .btn-agregar-rapido {
+  background: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.tarjeta-plato.agotado .btn-agregar-rapido:hover {
+  transform: none;
+  background: #9ca3af;
+}
+
+/* Badge de temporalmente agotado */
+.badge-agotado-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 7;
+}
+
+/* Tarjeta agotada - Vista simple */
+.tarjeta-plato-simple.agotado {
+  opacity: 0.6;
+  background: #f9fafb;
+}
+
+.tarjeta-plato-simple.agotado .btn-agregar-simple {
+  background: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.tarjeta-plato-simple.agotado .plato-simple-nombre {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.tarjeta-plato-simple.agotado .plato-simple-precio {
+  color: #9ca3af;
+}
+
+/* Texto de agotado en vista simple */
+.texto-agotado-simple {
+  font-size: 0.65rem;
+  color: #ef4444;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 8px;
 }
 
 /* ==========================================================
@@ -2108,7 +2279,24 @@ button {
 @media (max-width: 768px) {
   .titulo-hero-carta { font-size: 2.2rem; }
   .hero-carta { height: 35vh; min-height: 250px; }
-  
+
+  /* Filtros de etiquetas responsive */
+  .filtros-etiquetas-carta {
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .filtro-etiqueta-carta {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Badge agotado responsive */
+  .badge-agotado-overlay {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
   /* GRID DE PLATOS EN 2 COLUMNAS PARA MÓVIL - VISTA DETALLADA */
   .grilla-platos {
     grid-template-columns: repeat(2, 1fr);
@@ -2263,10 +2451,39 @@ button {
 @media (max-width: 480px) {
   .nombre-club { font-size: 1.2rem; letter-spacing: 1px; }
   .logo-club { width: 48px; height: 48px; }
-  
+
   .titulo-hero-carta { font-size: 1.8rem; }
   .subtitulo-hero-carta { font-size: 0.95rem; }
-  
+
+  /* Filtros de etiquetas responsive pequeño */
+  .filtros-etiquetas-carta {
+    gap: 6px;
+    padding: 8px 0;
+  }
+
+  .filtro-etiqueta-carta {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  .indicador-disponible,
+  .indicador-promocion,
+  .indicador-agotado {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Badge agotado responsive pequeño */
+  .badge-agotado-overlay {
+    padding: 5px 8px;
+    font-size: 0.6rem;
+  }
+
+  .texto-agotado-simple {
+    font-size: 0.55rem;
+  }
+
   /* GRID DE PLATOS EN 2 COLUMNAS PARA MÓVIL PEQUEÑO - VISTA DETALLADA */
   .grilla-platos {
     grid-template-columns: repeat(2, 1fr);

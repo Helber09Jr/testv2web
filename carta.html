@@ -114,6 +114,25 @@
         <!-- Se generan dinámicamente desde carta.js -->
       </div>
 
+      <!-- Filtros por etiquetas/estado -->
+      <div class="filtros-etiquetas-carta" id="filtrosEtiquetas">
+        <button class="filtro-etiqueta-carta activo" data-etiqueta="todos">
+          Todos
+        </button>
+        <button class="filtro-etiqueta-carta" data-etiqueta="disponible">
+          <span class="indicador-disponible"></span>
+          Disponibles
+        </button>
+        <button class="filtro-etiqueta-carta" data-etiqueta="promociones">
+          <span class="indicador-promocion"></span>
+          Promociones
+        </button>
+        <button class="filtro-etiqueta-carta" data-etiqueta="agotado">
+          <span class="indicador-agotado"></span>
+          Agotados
+        </button>
+      </div>
+
       <!-- Contador de resultados -->
       <div class="contador-resultados" id="contadorResultados">
         <span id="numResultados">0</span> platos encontrados

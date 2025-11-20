@@ -1534,6 +1534,29 @@ body {
 }
 
 /* ==========================================================
+   ESTADÍSTICAS DE CARTA
+   ========================================================== */
+
+.seccion-estadisticas-carta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.seccion-estadisticas-carta .icono-estadistica.disponible {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.seccion-estadisticas-carta .icono-estadistica.agotado {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.seccion-estadisticas-carta .icono-estadistica.promocion {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+/* ==========================================================
    GESTIÓN DE CARTA - FILTROS
    ========================================================== */
 
@@ -1658,6 +1681,86 @@ body {
 .boton-editar-etiquetas:hover {
   background: var(--azul-oscuro);
   transform: translateY(-2px);
+}
+
+/* ==========================================================
+   TOGGLE RÁPIDO DE AGOTADO
+   ========================================================== */
+
+.acciones-plato-admin {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.boton-toggle-agotado {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 2px solid #e8e8e8;
+  background: #fafafa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.boton-toggle-agotado svg {
+  width: 20px;
+  height: 20px;
+  stroke: #9ca3af;
+  transition: all 0.3s ease;
+}
+
+.boton-toggle-agotado:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.boton-toggle-agotado:hover svg {
+  stroke: #ef4444;
+}
+
+.boton-toggle-agotado.activo {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.boton-toggle-agotado.activo svg {
+  stroke: white;
+}
+
+.boton-toggle-agotado.activo:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Tooltip para toggle */
+.boton-toggle-agotado::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.boton-toggle-agotado:hover::after {
+  opacity: 1;
+  visibility: visible;
   box-shadow: 0 4px 12px rgba(0, 82, 180, 0.3);
 }
 
@@ -1879,6 +1982,12 @@ body {
     height: 16px;
   }
 
+  /* Estadísticas carta responsive */
+  .seccion-estadisticas-carta {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
   /* Lista de platos responsive */
   .tarjeta-plato-admin {
     flex-direction: column;
@@ -1891,8 +2000,17 @@ body {
     height: 120px;
   }
 
-  .boton-editar-etiquetas {
+  .acciones-plato-admin {
     width: 100%;
+  }
+
+  .boton-toggle-agotado {
+    width: 48px;
+    height: 48px;
+  }
+
+  .boton-editar-etiquetas {
+    flex: 1;
     justify-content: center;
   }
 
