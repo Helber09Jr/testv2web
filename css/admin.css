@@ -250,6 +250,62 @@ body {
 }
 
 /* ==========================================================
+   TABS DE NAVEGACIÓN
+   ========================================================== */
+
+.tabs-admin {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 20px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.tab-admin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-admin:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--blanco);
+}
+
+.tab-admin.activo {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--dorado);
+  color: var(--blanco);
+}
+
+.tab-admin svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Badge para reservas manuales */
+.badge-manual {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(108, 117, 125, 0.15);
+  color: #6c757d;
+  margin-left: 8px;
+}
+
+/* ==========================================================
    CONTENIDO PRINCIPAL
    ========================================================== */
 
@@ -1482,7 +1538,7 @@ body {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
+
   .boton-ver-detalle {
     width: 100%;
     justify-content: center;
@@ -1490,58 +1546,265 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Header responsive */
   .contenedor-header-admin {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 12px 15px;
   }
-  
-  .acciones-admin {
-    flex-direction: column;
+
+  .logo-admin {
     gap: 10px;
   }
-  
+
+  .logo-img-admin {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info-admin h1 {
+    font-size: 1.1rem;
+  }
+
+  .info-admin span {
+    font-size: 0.75rem;
+  }
+
+  .acciones-admin {
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .usuario-actual {
+    font-size: 0.8rem;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .boton-cerrar-sesion {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Tabs responsive */
+  .tabs-admin {
+    padding: 10px 15px;
+    gap: 8px;
+  }
+
+  .tab-admin {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    flex: 1;
+    justify-content: center;
+  }
+
   .contenido-admin {
     padding: 20px 15px;
   }
-  
+
+  /* Estadísticas en grid 2x2 */
+  .seccion-estadisticas {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .tarjeta-estadistica {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .icono-estadistica {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icono-estadistica svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .numero-estadistica {
+    font-size: 1.6rem;
+  }
+
+  .etiqueta-estadistica {
+    font-size: 0.8rem;
+  }
+
   .contenedor-filtros {
     flex-direction: column;
   }
-  
+
   .filtro-item {
     width: 100%;
   }
-  
+
   .detalle-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .botones-estado {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
-  
+
   .contenedor-login {
     padding: 35px 25px;
+  }
+
+  /* Modal responsive */
+  .modal-contenido-admin {
+    margin: 10px;
+    max-height: calc(100vh - 20px);
   }
 }
 
 @media (max-width: 480px) {
+  /* Header más compacto */
+  .contenedor-header-admin {
+    padding: 10px 12px;
+  }
+
+  .logo-img-admin {
+    width: 35px;
+    height: 35px;
+  }
+
+  .info-admin h1 {
+    font-size: 1rem;
+  }
+
+  .info-admin span {
+    display: none;
+  }
+
+  .usuario-actual {
+    display: none;
+  }
+
+  .boton-cerrar-sesion {
+    padding: 8px 10px;
+  }
+
+  .boton-cerrar-sesion span {
+    display: none;
+  }
+
+  /* Tabs más compactos */
+  .tabs-admin {
+    padding: 8px 10px;
+  }
+
+  .tab-admin {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+
+  .tab-admin svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Estadísticas 2x2 */
   .seccion-estadisticas {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
-  
+
+  .tarjeta-estadistica {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .icono-estadistica {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+  }
+
+  .icono-estadistica svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .numero-estadistica {
+    font-size: 1.4rem;
+  }
+
+  .etiqueta-estadistica {
+    font-size: 0.75rem;
+  }
+
+  /* Botón reserva manual */
+  .boton-reserva-manual {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Modal */
   .modal-contenido-admin {
-    margin: 10px;
+    margin: 5px;
+    border-radius: 15px;
   }
-  
+
   .modal-header-admin,
   .modal-body-admin {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
-  
+
+  .modal-header-admin {
+    padding-top: 20px;
+  }
+
+  .modal-header-admin h3 {
+    font-size: 1.3rem;
+  }
+
   .botones-estado {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .boton-estado {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .boton-estado svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Lista de reservas */
+  .tarjeta-reserva-admin {
+    padding: 15px;
+  }
+
+  .nombre-instalacion {
+    font-size: 0.95rem;
+  }
+
+  .reserva-fecha,
+  .reserva-horario,
+  .socio-nombre,
+  .socio-telefono,
+  .socio-personas {
+    font-size: 0.85rem;
+  }
+
+  /* Filtros */
+  .seccion-filtros {
+    padding: 15px;
+  }
+
+  .titulo-seccion-admin {
+    font-size: 1.2rem;
   }
 }
