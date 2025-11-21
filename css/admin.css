@@ -1947,77 +1947,262 @@ body {
 }
 
 /* ==========================================================
-   RESPONSIVE
+   RESPONSIVE - DISEÑO MÓVIL COMPACTO
    ========================================================== */
 
 @media (max-width: 1024px) {
   .tarjeta-reserva-admin {
-    grid-template-columns: 1fr;
-    gap: 15px;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
   }
-  
+
   .boton-ver-detalle {
-    width: 100%;
-    justify-content: center;
+    padding: 10px 16px;
   }
 }
 
 @media (max-width: 768px) {
+  /* Header compacto - mantener horizontal */
   .contenedor-header-admin {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 0 15px;
   }
 
-  .acciones-admin {
-    flex-direction: column;
+  .logo-admin {
     gap: 10px;
   }
 
-  .contenido-admin {
-    padding: 20px 15px;
+  .logo-img-admin {
+    width: 40px;
+    height: 40px;
   }
 
+  .info-admin h1 {
+    font-size: 1rem;
+  }
+
+  .info-admin span {
+    font-size: 0.75rem;
+  }
+
+  .acciones-admin {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .usuario-actual {
+    font-size: 0.75rem;
+    display: none; /* Ocultar en móvil para ahorrar espacio */
+  }
+
+  .boton-cerrar-sesion {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .boton-cerrar-sesion svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .contenido-admin {
+    padding: 15px 12px;
+  }
+
+  /* Filtros en grid 2 columnas - COMPACTO */
   .contenedor-filtros {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
   .filtro-item {
     width: 100%;
+    min-width: auto;
   }
 
+  .filtro-item label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  .filtro-item input,
+  .filtro-item select {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .boton-limpiar-filtros {
+    grid-column: 1 / -1;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    justify-content: center;
+  }
+
+  /* Estadísticas en 2x2 grid - COMPACTO */
+  .seccion-estadisticas {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .tarjeta-estadistica {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .icono-estadistica {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+
+  .icono-estadistica svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .numero-estadistica {
+    font-size: 1.4rem;
+  }
+
+  .etiqueta-estadistica {
+    font-size: 0.75rem;
+  }
+
+  /* Modal detalle - mantener 2 columnas */
   .detalle-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .modal-contenido-admin {
+    margin: 10px;
+    border-radius: 16px;
+  }
+
+  .modal-header-admin {
+    padding: 20px 20px 15px;
+  }
+
+  .modal-header-admin h3 {
+    font-size: 1.3rem;
+  }
+
+  .modal-body-admin {
+    padding: 15px 20px 20px;
+  }
+
+  .detalle-etiqueta {
+    font-size: 0.7rem;
+  }
+
+  .detalle-valor {
+    font-size: 0.9rem;
   }
 
   .botones-estado {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .boton-estado {
+    padding: 10px 12px;
+    font-size: 0.8rem;
   }
 
   .contenedor-login {
     padding: 35px 25px;
   }
 
-  /* Tabs responsive */
-  .nav-tabs-admin {
-    padding: 10px 15px;
-    gap: 8px;
+  /* Reservas en tarjetas compactas horizontales */
+  .tarjeta-reserva-admin {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 12px;
   }
 
-  .tab-admin {
+  .reserva-info-principal {
+    gap: 6px;
+  }
+
+  .reserva-info-socio {
+    display: none; /* Ocultar info secundaria en móvil */
+  }
+
+  .nombre-instalacion {
+    font-size: 0.9rem;
+  }
+
+  .badge-estado {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+  }
+
+  .reserva-fecha,
+  .reserva-horario {
+    font-size: 0.8rem;
+  }
+
+  .boton-ver-detalle {
     padding: 8px 12px;
     font-size: 0.8rem;
   }
 
+  /* Acciones rápidas compactas */
+  .seccion-acciones-rapidas {
+    margin-bottom: 20px;
+  }
+
+  .boton-reserva-manual {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  /* Tabs responsive */
+  .nav-tabs-admin {
+    padding: 10px 15px;
+    gap: 6px;
+  }
+
+  .tab-admin {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
   .tab-admin svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   /* Estadísticas carta responsive */
   .seccion-estadisticas-carta {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  .seccion-estadisticas-carta .tarjeta-estadistica {
+    padding: 12px 10px;
+  }
+
+  .seccion-estadisticas-carta .icono-estadistica {
+    width: 38px;
+    height: 38px;
+  }
+
+  .seccion-estadisticas-carta .icono-estadistica svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .seccion-estadisticas-carta .numero-estadistica {
+    font-size: 1.3rem;
+  }
+
+  .seccion-estadisticas-carta .etiqueta-estadistica {
+    font-size: 0.7rem;
   }
 
   /* Sección de platos admin responsive */
@@ -2120,22 +2305,121 @@ body {
 }
 
 @media (max-width: 480px) {
+  /* Mantener estadísticas en 2x2 - COMPACTO */
   .seccion-estadisticas {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
+  .tarjeta-estadistica {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .icono-estadistica {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icono-estadistica svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .numero-estadistica {
+    font-size: 1.2rem;
+  }
+
+  .etiqueta-estadistica {
+    font-size: 0.65rem;
+  }
+
+  /* Modal compacto pero manteniendo 2 columnas */
   .modal-contenido-admin {
-    margin: 10px;
+    margin: 8px;
+    border-radius: 12px;
   }
 
-  .modal-header-admin,
+  .modal-header-admin {
+    padding: 15px;
+  }
+
+  .modal-header-admin h3 {
+    font-size: 1.1rem;
+  }
+
   .modal-body-admin {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 12px 15px 15px;
+  }
+
+  .detalle-grid {
+    gap: 10px;
+  }
+
+  .detalle-etiqueta {
+    font-size: 0.65rem;
+  }
+
+  .detalle-valor {
+    font-size: 0.8rem;
   }
 
   .botones-estado {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .boton-estado {
+    padding: 8px;
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+
+  .boton-estado svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Filtros compactos */
+  .contenedor-filtros {
+    gap: 8px;
+  }
+
+  .filtro-item input,
+  .filtro-item select {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  /* Reservas ultra compactas */
+  .tarjeta-reserva-admin {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .nombre-instalacion {
+    font-size: 0.85rem;
+  }
+
+  .reserva-fecha,
+  .reserva-horario {
+    font-size: 0.75rem;
+  }
+
+  .boton-ver-detalle {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  /* Tabs más compactas */
+  .nav-tabs-admin {
+    padding: 8px 10px;
+    gap: 4px;
+  }
+
+  .tab-admin {
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
 
   /* Lista de platos en móvil pequeño - forzar horizontal compacto */
@@ -2179,17 +2463,37 @@ body {
   /* Estadísticas carta en móvil pequeño */
   .seccion-estadisticas-carta {
     grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
   }
 
   .seccion-estadisticas-carta .tarjeta-estadistica {
-    padding: 12px 10px !important;
+    padding: 10px 8px !important;
+  }
+
+  .seccion-estadisticas-carta .icono-estadistica {
+    width: 32px !important;
+    height: 32px !important;
   }
 
   .seccion-estadisticas-carta .numero-estadistica {
-    font-size: 1.3rem !important;
+    font-size: 1.1rem !important;
   }
 
   .seccion-estadisticas-carta .etiqueta-estadistica {
-    font-size: 0.7rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  /* WhatsApp button compacto */
+  .boton-whatsapp-admin {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  /* Botón reserva manual compacto */
+  .boton-reserva-manual {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
   }
 }
