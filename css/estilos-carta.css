@@ -1149,8 +1149,8 @@ button {
   width: 40px;
   height: 40px;
   border: none;
-  background: rgba(255, 255, 255, 0.95);
-  color: #333;
+  background: var(--azul-principal);
+  color: var(--blanco);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1158,18 +1158,18 @@ button {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 82, 180, 0.3);
 }
 
 .boton-cerrar-vista svg {
   width: 22px;
   height: 22px;
+  stroke: var(--blanco);
 }
 
-.boton-cerrar-vista:hover { 
-  background: var(--rojo-error);
-  color: var(--blanco);
-  transform: scale(1.1) rotate(90deg); 
+.boton-cerrar-vista:hover {
+  background: var(--azul-oscuro);
+  transform: scale(1.1) rotate(90deg);
 }
 
 .modal-vista-imagen {
@@ -1453,8 +1453,8 @@ button {
   width: 38px;
   height: 38px;
   border: none;
-  background: rgba(255, 255, 255, 0.95);
-  color: #333;
+  background: var(--azul-principal);
+  color: var(--blanco);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1462,18 +1462,18 @@ button {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 82, 180, 0.3);
 }
 
 .boton-cerrar-modal svg {
   width: 20px;
   height: 20px;
+  stroke: var(--blanco);
 }
 
-.boton-cerrar-modal:hover { 
-  background: var(--rojo-error);
-  color: var(--blanco);
-  transform: scale(1.1) rotate(90deg); 
+.boton-cerrar-modal:hover {
+  background: var(--azul-oscuro);
+  transform: scale(1.1) rotate(90deg);
 }
 
 .boton-cerrar-modal:focus-visible {

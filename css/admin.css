@@ -660,7 +660,7 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: #f0f0f0;
+  background: var(--azul-principal);
   border: none;
   width: 40px;
   height: 40px;
@@ -671,17 +671,18 @@ body {
   justify-content: center;
   transition: all 0.3s ease;
   z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 82, 180, 0.3);
 }
 
 .boton-cerrar-modal-admin:hover {
-  background: #e0e0e0;
-  transform: rotate(90deg);
+  background: var(--azul-oscuro);
+  transform: scale(1.1) rotate(90deg);
 }
 
 .boton-cerrar-modal-admin svg {
   width: 20px;
   height: 20px;
-  stroke: #666;
+  stroke: var(--blanco);
 }
 
 .modal-header-admin {
