@@ -374,19 +374,20 @@ function renderizarReservas() {
 // ==========================================================
 
 function inicializarModal() {
-  const btnCerrar = document.querySelector('.boton-cerrar-modal-admin');
-  const overlay = document.querySelector('.modal-overlay-admin');
-  
-  if (btnCerrar) btnCerrar.onclick = cerrarModalDetalle;
-  if (overlay) overlay.onclick = cerrarModalDetalle;
-  
+  // Botón cerrar del modal de detalle
+  const btnCerrarDetalle = document.getElementById('btnCerrarDetalle');
+  const overlayDetalle = document.getElementById('overlayDetalle');
+
+  if (btnCerrarDetalle) btnCerrarDetalle.onclick = cerrarModalDetalle;
+  if (overlayDetalle) overlayDetalle.onclick = cerrarModalDetalle;
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       cerrarModalDetalle();
       cerrarModalReservaManual();
     }
   });
-  
+
   document.querySelectorAll('.boton-estado').forEach(btn => {
     btn.onclick = () => {
       const nuevoEstado = btn.getAttribute('data-estado');
